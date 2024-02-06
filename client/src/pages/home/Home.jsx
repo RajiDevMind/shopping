@@ -6,6 +6,7 @@ import PageHeading from "../../components/PageHeading";
 import { productData } from "../../components/carousel/data";
 import CarouselItems from "../../components/carousel/Carousel-items";
 import ProductCarousel from "../../components/carousel/Carousel";
+import ProductCategory from "./ProductCategory";
 
 const Home = () => {
   const products = productData.map((item, index) => {
@@ -23,11 +24,19 @@ const Home = () => {
   return (
     <>
       <Slider />
-      <div className="container">
-        <HomeInfoBox />
-        <PageHeading heading={"Latest Products"} btnText={"Shop Now >>>"} />
-        <ProductCarousel product={products} />
-      </div>
+      <section>
+        <div className="container">
+          <HomeInfoBox />
+          <PageHeading heading={"Latest Products"} btnText={"Shop Now >>>"} />
+          <ProductCarousel product={products} />
+        </div>
+      </section>
+      <section className="--bt-grey">
+        <div className="container">
+          <h3>Categories</h3>
+          <ProductCategory />
+        </div>
+      </section>
     </>
   );
 };
