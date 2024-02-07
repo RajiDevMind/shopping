@@ -7,6 +7,7 @@ import { productData } from "../../components/carousel/data";
 import CarouselItems from "../../components/carousel/Carousel-items";
 import ProductCarousel from "../../components/carousel/Carousel";
 import ProductCategory from "./ProductCategory";
+import FooterLinks from "../../components/footer/FooterLinks";
 
 const Home = () => {
   const products = productData.map((item, index) => {
@@ -31,12 +32,19 @@ const Home = () => {
           <ProductCarousel product={products} />
         </div>
       </section>
-      <section className="--bt-grey">
+      <section className="--bg-grey">
         <div className="container">
           <h3>Categories</h3>
           <ProductCategory />
         </div>
       </section>
+      <section>
+        <div className="container">
+          <PageHeading heading={"Mobile Phones"} btnText={"Shop Now >>>"} />
+          <ProductCarousel product={products} />
+        </div>
+      </section>
+      <FooterLinks />
     </>
   );
 };
