@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const { ObjectId } = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
@@ -11,7 +12,7 @@ const userSchema = mongoose.Schema({
     required: [true, "Email can't be empty!"],
     unique: true,
     trim: true,
-    match: [],
+    match: [/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/],
   },
   password: {
     type: String,
@@ -27,7 +28,7 @@ const userSchema = mongoose.Schema({
   photo: {
     type: String,
     required: [true, "Kindly add a profile image!"],
-    default: "image url here",
+    default: "https://ibb.co/F35vvTZ",
   },
   phone: {
     type: String,
@@ -37,6 +38,18 @@ const userSchema = mongoose.Schema({
     type: Object,
     // address, state, country
   },
+});
+
+// Encrypt users password b4 sending to DB
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  // Hash password
+  const salt = bcrypt.genSaltSync(10);
+  const hashPassword = bcrypt.hashSync(this.password, salt);
+  this.password = hashPassword;
+  next();
 });
 
 const User = mongoose.model("User", userSchema);
