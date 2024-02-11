@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDB = require("./db/connect");
 const userRoutes = require("./routes/userRoutes");
+const errorHandler = require("./middleware/errorMiddleware");
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(
     credentials: true,
   })
 );
+
+// error middleware
+app.use(errorHandler());
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello World!!!</h1>");
