@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "A virtual online platform that facilitate buying and selling of products and services over the internet, which serves as a virtual marketplace where businesses and individual showcase their products, interact with customers and conducive transactions(payments) hassle free shoppers.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -26,5 +26,8 @@
     "nodemailer": "^6.9.0",
     "slugify": "^1.6.6",
     "stripe": "^12.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
