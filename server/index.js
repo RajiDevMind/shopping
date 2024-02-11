@@ -22,7 +22,7 @@ app.use(
 );
 
 // error middleware
-app.use(errorHandler());
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello World!!!</h1>");

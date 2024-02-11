@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 const errorHandler = (err, req, res, next) => {
-  const statusCode = res.statusCode ? res.statusCode : 500;
-  res.status(statusCode);
+  const statusCodes = res.statusCode ? res.statusCode : 500;
+  res.status(statusCodes);
   res.json({
     message: err.message,
     stack: process.env.NODE_ENV === "development" ? err.stack : null,
@@ -10,5 +10,3 @@ const errorHandler = (err, req, res, next) => {
 };
 
 module.exports = errorHandler;
-
-res.status(statusCode);
