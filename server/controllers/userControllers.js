@@ -1,6 +1,7 @@
 require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 
 const generateToken = (id) => {
@@ -50,4 +51,39 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  // Validate
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Empty email or password!");
+  }
+  // check if user exists
+  const existinUser = await User.findOne({ email });
+  if (!existinUser) {
+    res.status(400);
+    throw new Error("User doesn`t exists!");
+  }
+
+  const confirmPassword = bcrypt.compareSync(password, existinUser.password);
+  const token = generateToken(existinUser._id);
+
+  if (existinUser && confirmPassword) {
+    // send userDoc to the frontend excluding password
+    const userDoc = await User.findOne({ email }).select("-password");
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000 * 2592000),
+      // secure: true,
+      // sameSite: "none",
+    });
+    res.status(201).json(userDoc);
+  } else {
+    res.status(400);
+    throw new Error("Invalid email or password!");
+  }
+});
+
+module.exports = { registerUser, loginUser };
