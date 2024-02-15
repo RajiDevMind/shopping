@@ -91,10 +91,20 @@ const logoutUser = asyncHandler(async (req, res) => {
     path: "/",
     httpOnly: true,
     expires: new Date(0),
-    secure: true,
-    sameSite: "none",
+    // secure: true,
+    // sameSite: "none",
   });
   res.status(200).json({ msg: "Logged out Successlly!" });
 });
 
-module.exports = { registerUser, loginUser, logoutUser };
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(400);
+    throw new Error("User not found!");
+  }
+});
+
+module.exports = { registerUser, loginUser, logoutUser, getUser };
