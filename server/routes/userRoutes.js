@@ -6,11 +6,15 @@ const {
   loginUser,
   logoutUser,
   getUser,
+  getLoginStatus,
+  updateUser,
 } = require("../controllers/userControllers");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
-router.get("/getuser", protect, getUser);
+router.get("/get-user", protect, getUser);
+router.get("/status", getLoginStatus);
+router.patch("/update-user", protect, updateUser);
 
 module.exports = router;
