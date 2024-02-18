@@ -136,6 +136,16 @@ const updateUser = asyncHandler(async (req, res) => {
     throw new Error("User not found!");
   }
 });
+
+const add_Image = asyncHandler(async (req, res) => {
+  const { photo } = req.body;
+  const user = await User.findById(req.user.id);
+  user.photo = photo;
+
+  const addImage = await user.save();
+  res.status(200).json(addImage);
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -143,4 +153,5 @@ module.exports = {
   getUser,
   getLoginStatus,
   updateUser,
+  add_Image,
 };
