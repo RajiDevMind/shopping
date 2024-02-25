@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./auth.module.scss";
 import LoginIMG from "../../assets/login.png";
 import Card from "../../components/card/Card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../redux/auth/authSlice.jsx";
+import { register, RESET_AUTH } from "../../redux/auth/authSlice.jsx";
 import Loader from "../../components/loader/Loader.jsx";
 
 const initialState = {
@@ -26,6 +26,7 @@ const Register = () => {
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +57,16 @@ const Register = () => {
     // dispatch func from redux to send data to d server
     await dispatch(register(userData));
   };
+
+  // to monitor logged in & loading state & navigate to home page
+  useEffect(() => {
+    if (isSuccess && isLoggedIn) {
+      navigate("/");
+    }
+    // dispatch func from redux to reset data to default states after loggedIn
+    dispatch(RESET_AUTH());
+  }, [isSuccess, isLoggedIn, dispatch, navigate]);
+
   return (
     <>
       {isLoading && <Loader />}
