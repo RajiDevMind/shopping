@@ -5,3 +5,9 @@ export const shortenText = (text, n) => {
   }
   return text;
 };
+
+// Validate Email
+
+export const validateEmail = (email) => {
+  return email.match(/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/);
+};

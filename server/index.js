@@ -16,8 +16,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:2000"],
     credentials: true,
+    origin: "http://localhost:5173",
+    method: ["GET", "POST", "PUT", "DELETE"],
+    optionsSuccessStatus: 200,
   })
 );
 
