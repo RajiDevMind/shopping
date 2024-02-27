@@ -2,7 +2,7 @@ import React from "react";
 import "./FooterLinks.scss";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import logoImg from "../../assets/shopito_logo.png";
+import logoImg from "../../assets/raji-l.png";
 import links from "./links";
 
 const FooterLinks = () => {
