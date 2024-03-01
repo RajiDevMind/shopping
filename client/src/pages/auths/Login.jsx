@@ -42,7 +42,7 @@ const Login = () => {
     if (isSuccess && isLoggedIn) {
       navigate("/");
 
-      dispatch(RESET_AUTH(""));
+      dispatch(RESET_AUTH());
     }
   }, [isSuccess, isLoggedIn, navigate, dispatch]);
 

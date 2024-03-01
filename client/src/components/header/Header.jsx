@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styles from "./Header.module.scss";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { RESET_AUTH, logout } from "../../redux/auth/authSlice";
 
 export const logo = (
   <div className={styles.logo}>
@@ -23,6 +25,10 @@ const Header = () => {
 
   // state to fix navbar
   const [scrollPage, setScrollPage] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const fixNavbar = () => {
     window.scrollY > 400 ? setScrollPage(true) : setScrollPage(false);
   };
@@ -36,6 +42,13 @@ const Header = () => {
   const hideMenu = () => {
     setShowMenu(false);
   };
+
+  const logoutUser = async () => {
+    await dispatch(logout());
+    await dispatch(RESET_AUTH());
+    navigate("/login");
+  };
+
   const cart = (
     <span className={styles.cart}>
       <NavLink to={"/cart"}>
@@ -84,6 +97,9 @@ const Header = () => {
               </NavLink>
               <NavLink to={"/order-history"} className={activeLink}>
                 My Order
+              </NavLink>
+              <NavLink to={"/"} onClick={logoutUser}>
+                logout
               </NavLink>
             </span>
             {cart}
