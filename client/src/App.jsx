@@ -8,12 +8,21 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getLoginStatus } from "./redux/auth/authSlice";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
 axios.defaults.withCredentials = true;
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getLoginStatus());
+  }, [dispatch]);
+
   return (
     <div>
       <>

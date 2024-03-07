@@ -68,6 +68,27 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   }
 });
 
+// Login Status Users
+export const getLoginStatus = createAsyncThunk(
+  "auth/getLoginStatus",
+  async (_, thunkAPI) => {
+    try {
+      const responseData = await authService.getLoginStatus();
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -133,6 +154,24 @@ const authSlice = createSlice({
         state.isError = true;
         state.msg = action.payload;
         toast.success(action.payload);
+      })
+      // Get LoginStatus user
+      .addCase(getLoginStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getLoginStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isLoggedIn = action.payload;
+        // getting err message from the server
+        if (action.payload.message === "invalid sigature") {
+          state.isLoggedIn = false;
+        }
+      })
+      .addCase(getLoginStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
       });
   },
 });
