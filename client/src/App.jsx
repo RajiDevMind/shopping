@@ -11,6 +11,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getLoginStatus } from "./redux/auth/authSlice";
+import Profile from "./pages/profile/Profile";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
           <Footer />
         </BrowserRouter>
