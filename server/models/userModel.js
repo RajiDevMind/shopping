@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema({
   photo: {
     type: String,
     required: [true, "Kindly add a profile image!"],
-    default: "https://ibb.co/F35vvTZ",
+    default: "https://ibb.co/7jQDzd5",
   },
   phone: {
     type: String,

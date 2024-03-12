@@ -16,8 +16,10 @@
     margin-bottom: 1rem;
 
     & img {
-      width: 200px;
-      height: 200px;
+      max-width: 50%;
+      max-height: 50%;
+      margin: 0 25%;
+      object-fit: cover;
       border: 2px solid #fff;
       border-radius: 50%;
     }
