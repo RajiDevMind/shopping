@@ -3,10 +3,16 @@ import "./Profile.scss";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/card/Card";
-import { getUser, updateUser } from "../../redux/auth/authSlice";
+import { getUser, updateImg, updateUser } from "../../redux/auth/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+
+// how to import .env file in your create vite@latest
+const cloudName = import.meta.env.CLOUD_NAME;
+const uploadPreset = import.meta.env.UPLOAD_PRESET;
+
+const url = "https://api.cloudinary.com/v1_1/rajidevmind/image/upload";
 
 const Profile = () => {
   // useSelector to select an item from redux anywhere in your application
@@ -18,7 +24,7 @@ const Profile = () => {
     phone: user?.phone || "",
     role: user?.role || "",
     photo: user?.photo || "",
-    address: user?.address || {
+    address: {
       address: user?.address?.address || "",
       state: user?.address?.state || "",
       country: user?.address?.country || "",
@@ -72,7 +78,36 @@ const Profile = () => {
     await dispatch(updateUser(userData));
   };
 
-  const savePhoto = () => {};
+  const savePhoto = async (e) => {
+    e.preventDefault();
+    let imageURL;
+    try {
+      if (
+        profileImg !== null &&
+        (profileImg.type === "image/jpeg" ||
+          profileImg.type === "image/jpg" ||
+          profileImg.type === "image/png")
+      ) {
+        const image = new FormData();
+        image.append("file", profileImg);
+        image.append("cloudName", cloudName);
+        image.append("uploadPreset", uploadPreset);
+
+        // save to cloudinary
+        const resp = await fetch(url, { method: "POST", body: image });
+        const imgData = await resp.json();
+        console.log(imgData);
+        imageURL = imgData.url.toString();
+      }
+
+      // save image to mongodb
+      const userData = { photo: profileImg ? imageURL : profile.photo };
+      await dispatch(updateImg(userData));
+      setImgPreview(null);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
 
   return (
     <>
@@ -83,6 +118,7 @@ const Profile = () => {
           <h2>Profile</h2>
           <div className="--flex-start profile">
             <Card cardClass={"card"}>
+              {!isLoading || (!user && <p>Check your internet connection!</p>)}
               {!isLoading && user && (
                 <>
                   <div className="profile-photo">
