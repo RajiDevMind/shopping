@@ -8,11 +8,10 @@ import { toast } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
-// how to import .env file in your create vite@latest
-const cloudName = import.meta.env.CLOUD_NAME;
-const uploadPreset = import.meta.env.UPLOAD_PRESET;
+const cloudName = "rajidevmind";
+const uploadPreset = "dqmuli5h";
 
-const url = "https://api.cloudinary.com/v1_1/rajidevmind/image/upload";
+const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
 const Profile = () => {
   // useSelector to select an item from redux anywhere in your application
@@ -96,8 +95,7 @@ const Profile = () => {
         // save to cloudinary
         const resp = await fetch(url, { method: "POST", body: image });
         const imgData = await resp.json();
-        console.log(imgData);
-        imageURL = imgData.url.toString();
+        imageURL = imgData.secure_url.toString();
       }
 
       // save image to mongodb
