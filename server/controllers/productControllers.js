@@ -51,4 +51,14 @@ const getAllProducts = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-module.exports = { createProduct, getAllProducts };
+const getSingleProduct = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+  if (!product) {
+    res.status(404);
+    throw new Error("Product Not Found!");
+  }
+  res.status(200).json(product);
+});
+
+module.exports = { createProduct, getAllProducts, getSingleProduct };
