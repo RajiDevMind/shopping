@@ -61,4 +61,75 @@ const getSingleProduct = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-module.exports = { createProduct, getAllProducts, getSingleProduct };
+const deleteProduct = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+      res.status(404);
+      throw new Error("Product Not Found!");
+    }
+    await Product.findByIdAndDelete(id);
+    res.status(200).json({ msg: "Deleted Successfully!" });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error!");
+  }
+});
+
+const updateProduct = asyncHandler(async (req, res) => {
+  try {
+    const {
+      name,
+      category,
+      brand,
+      color,
+      quantity,
+      sold,
+      regularPrice,
+      price,
+      description,
+      image,
+      ratings,
+    } = req.body;
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+      res.status(404);
+      throw new Error("Product not found!");
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(
+      { id },
+      {
+        name,
+        category,
+        brand,
+        color,
+        quantity,
+        sold,
+        regularPrice,
+        price,
+        description,
+        image,
+        ratings,
+      },
+      {
+        // Ensure to validate model required statement
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(201).json(updatedProduct);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error!");
+  }
+});
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getSingleProduct,
+  deleteProduct,
+  updateProduct,
+};

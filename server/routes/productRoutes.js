@@ -4,6 +4,8 @@ const {
   createProduct,
   getAllProducts,
   getSingleProduct,
+  deleteProduct,
+  updateProduct,
 } = require("../controllers/productControllers");
 const { auth, adminOnlyAuth } = require("../middleware/authMiddleware");
 
@@ -11,5 +13,7 @@ const { auth, adminOnlyAuth } = require("../middleware/authMiddleware");
 router.post("/", auth, adminOnlyAuth, createProduct);
 router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
+router.delete("/:id", auth, adminOnlyAuth, deleteProduct);
+router.patch("/:id", auth, adminOnlyAuth, updateProduct);
 
 module.exports = router;
