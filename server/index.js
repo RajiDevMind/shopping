@@ -4,8 +4,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDB = require("./db/connect");
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
-
 const app = express();
 
 const port = process.env.PORT || 2000;
@@ -30,6 +30,7 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello World!!!</h1>");
 });
 app.use("/auth/users/", userRoutes);
+app.use("/auth/products/", productRoutes);
 
 const start = async () => {
   try {

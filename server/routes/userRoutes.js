@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { protect } = require("../middleware/authMiddleware");
+const { auth } = require("../middleware/authMiddleware");
 const {
   registerUser,
   loginUser,
@@ -14,9 +14,9 @@ const {
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
-router.get("/get-user", protect, getUser);
+router.get("/get-user", auth, getUser);
 router.get("/status", getLoginStatus);
-router.patch("/update-user", protect, updateUser);
-router.patch("/add-image", protect, add_Image);
+router.patch("/update-user", auth, updateUser);
+router.patch("/add-image", auth, add_Image);
 
 module.exports = router;

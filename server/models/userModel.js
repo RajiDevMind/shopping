@@ -41,16 +41,20 @@ const userSchema = mongoose.Schema({
 });
 
 // Encrypt users password b4 sending to DB
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  // Hash password
-  const salt = bcrypt.genSaltSync(10);
-  const hashPassword = bcrypt.hashSync(this.password, salt);
-  this.password = hashPassword;
-  next();
-});
+userSchema.pre(
+  "save",
+  function (next) {
+    if (!this.isModified("password")) {
+      return next();
+    }
+    // Hash password
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(this.password, salt);
+    this.password = hashPassword;
+    next();
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 

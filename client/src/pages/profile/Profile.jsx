@@ -90,12 +90,12 @@ const Profile = () => {
         const image = new FormData();
         image.append("file", profileImg);
         image.append("cloudName", cloudName);
-        image.append("uploadPreset", uploadPreset);
+        image.append("upload_preset", uploadPreset);
 
         // save to cloudinary
         const resp = await fetch(url, { method: "POST", body: image });
         const imgData = await resp.json();
-        imageURL = imgData.secure_url.toString();
+        imageURL = imgData.url.toString();
       }
 
       // save image to mongodb
