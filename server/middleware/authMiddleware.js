@@ -25,4 +25,10 @@ const auth = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = { auth };
+const adminOnlyAuth = asyncHandler((req, res, next) => {
+  if (req.user && req.user.role === "admin") next();
+  else res.status(401);
+  throw new Error("Not Authorized as an admin!");
+});
+
+module.exports = { auth, adminOnlyAuth };
