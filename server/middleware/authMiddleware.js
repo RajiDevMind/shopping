@@ -26,8 +26,10 @@ const auth = asyncHandler(async (req, res, next) => {
 });
 
 const adminOnlyAuth = asyncHandler((req, res, next) => {
-  if (req.user && req.user.role === "admin") next();
-  else res.status(401);
+  if (req.user && req.user.role === "admin") {
+    next();
+    return;
+  } else res.status(401);
   throw new Error("Not Authorized as an admin!");
 });
 
