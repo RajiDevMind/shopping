@@ -126,10 +126,42 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+const reviewProduct = asyncHandler(async (req, res) => {
+  const { star, review, reviewDate } = req.body;
+  const { id } = req.params;
+
+  if (star < 1 || !review) {
+    return res.status(400).json({ error: "Click on star to review!" });
+  }
+
+  const product = await Product.findById(id);
+  if (!product) {
+    return res.status(404).json({ error: "Unable to find product" });
+  }
+  // Update ratings
+  product.ratings.push({
+    star,
+    review,
+    reviewDate,
+    name: req.user.name,
+    userID: req.user._id,
+  });
+
+  await product.save(); // Waiting for the product to be saved before proceeding to the next operation
+
+  return res.status(201).json({
+    product: {
+      msg: "Product Successfully Reviewed!",
+      product: product.ratings,
+    },
+  });
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   deleteProduct,
   updateProduct,
+  reviewProduct,
 };

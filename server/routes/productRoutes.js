@@ -6,6 +6,7 @@ const {
   getSingleProduct,
   deleteProduct,
   updateProduct,
+  reviewProduct,
 } = require("../controllers/productControllers");
 const { auth, adminOnlyAuth } = require("../middleware/authMiddleware");
 
@@ -15,5 +16,7 @@ router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
 router.delete("/:id", auth, adminOnlyAuth, deleteProduct);
 router.patch("/:id", auth, adminOnlyAuth, updateProduct);
+
+router.patch("/review/:id", auth, reviewProduct);
 
 module.exports = router;

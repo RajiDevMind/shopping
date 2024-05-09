@@ -55,7 +55,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     image: { type: [String] },
-    ratings: { type: { Object } },
+    ratings: { type: [Object] },
   },
   { timestamps: true }
 );
