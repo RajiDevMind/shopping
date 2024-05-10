@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
+const { default: mongoose } = require("mongoose");
 
 const createProduct = asyncHandler(async (req, res) => {
   try {
@@ -176,6 +177,42 @@ const deleteReview = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "Review was deleted successfully!" });
 });
 
+const updateReview = asyncHandler(async (req, res) => {
+  const { star, review, reviewDate, userID } = req.body;
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+  if (!product) {
+    res.status(400);
+    throw new Error("Product not found");
+  }
+
+  // match user that want to update review with userID that created it
+  if (req.user._id.toString() !== userID) {
+    res.status(401);
+    throw new Error("User Not Authorized!");
+  }
+
+  const updateReview = await Product.findOneAndUpdate(
+    {
+      _id: product._id,
+      "ratings.userID": mongoose.Types.ObjectId(userID), // converting to mongoose types object
+    },
+    {
+      $set: {
+        "ratings.$.star": star,
+        "ratings.$.review": review,
+        "ratings.$.reviewDate": reviewDate,
+      },
+    }
+  );
+  if (updateReview) {
+    return res.status(200).json({ msg: "Review Updated successfully!" });
+  } else {
+    res.status(400).json({ msg: "Unable to Update Review!" });
+  }
+});
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -184,4 +221,5 @@ module.exports = {
   updateProduct,
   reviewProduct,
   deleteReview,
+  updateReview,
 };
