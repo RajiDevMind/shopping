@@ -5,6 +5,7 @@ const cors = require("cors");
 const connectDB = require("./db/connect");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 const app = express();
 
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 });
 app.use("/auth/users/", userRoutes);
 app.use("/auth/products/", productRoutes);
+app.use("/auth/category/", categoryRoutes);
 
 const start = async () => {
   try {
