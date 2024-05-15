@@ -79,7 +79,7 @@ const loginUser = asyncHandler(async (req, res) => {
       // secure: true,
       // sameSite: "none",
     });
-    res.status(201).json(userDoc);
+    return res.status(201).json(userDoc);
   } else {
     res.status(400);
     throw new Error("Invalid email or password!");
