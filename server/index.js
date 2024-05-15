@@ -8,6 +8,7 @@ const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const couponRoutes = require("./routes/couponRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/auth/products/", productRoutes);
 app.use("/auth/category/", categoryRoutes);
 app.use("/auth/brand/", brandRoutes);
 app.use("/auth/coupon/", couponRoutes);
+app.use("/auth/order/", orderRoutes);
 
 const start = async () => {
   try {
