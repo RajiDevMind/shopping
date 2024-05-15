@@ -5,7 +5,7 @@ import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { RESET_AUTH, logout } from "../../redux/auth/authSlice";
+import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/HiddenLink";
 import NavUsername from "../../pages/profile/NavUsername";
 

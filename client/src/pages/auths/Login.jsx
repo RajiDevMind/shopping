@@ -4,7 +4,7 @@ import LoginIMG from "../../assets/login.png";
 import Card from "../../components/card/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RESET_AUTH, login } from "../../redux/auth/authSlice";
+import { RESET_AUTH, login } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { validateEmail } from "../../utils";
 import Loader from "../../components/loader/Loader";

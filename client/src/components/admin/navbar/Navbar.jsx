@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Navbar.module.scss";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../../redux/auth/authSlice";
+import { selectUser } from "../../../redux/features/auth/authSlice";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
@@ -23,6 +23,11 @@ const Navbar = () => {
           <li>
             <NavLink to={"/admin/home"} className={activeLink}>
               Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/admin/category"} className={activeLink}>
+              Category
             </NavLink>
           </li>
         </ul>

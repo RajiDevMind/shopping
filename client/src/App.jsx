@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLoginStatus, getUser } from "./redux/auth/authSlice";
+import { getLoginStatus, getUser } from "./redux/features/auth/authSlice";
 import Profile from "./pages/profile/Profile";
 import Admin from "./pages/Admin/Admin";
 

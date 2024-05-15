@@ -1,9 +1,10 @@
 import React from "react";
+import Category from "../category/Category";
 
 const AdminHome = () => {
   return (
     <div>
-      <h1>AdminHome</h1>
+      <Category />
     </div>
   );
 };

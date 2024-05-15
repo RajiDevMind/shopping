@@ -3,7 +3,11 @@ import "./Profile.scss";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/card/Card";
-import { getUser, updateImg, updateUser } from "../../redux/auth/authSlice";
+import {
+  getUser,
+  updateImg,
+  updateUser,
+} from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineCloudUpload } from "react-icons/ai";
