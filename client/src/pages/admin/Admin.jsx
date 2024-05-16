@@ -4,6 +4,7 @@ import styles from "./Admin.module.scss";
 import Navbar from "../../components/admin/navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Category from "../../components/admin/category/Category";
+import Brand from "../../components/admin/brand/Brand";
 
 const Admin = () => {
   return (
@@ -15,6 +16,7 @@ const Admin = () => {
         <Routes>
           <Route path="home" element={<AdminHome />} />
           <Route path="category" element={<Category />} />
+          <Route path="brand" element={<Brand />} />
         </Routes>
       </div>
     </div>
