@@ -12,6 +12,22 @@ const createCategory = async (categoryData) => {
   return resp.data;
 };
 
-const categoryAndBrandService = { createCategory };
+// Get all Category
+const getCategories = async () => {
+  const resp = await axios.get(API_URL + "category/getCategories");
+  return resp.data;
+};
+
+// Delete Category by its slug
+const deleteCategory = async (slug) => {
+  const resp = await axios.delete(API_URL + "category/" + slug);
+  return resp.data.msg;
+};
+
+const categoryAndBrandService = {
+  createCategory,
+  getCategories,
+  deleteCategory,
+};
 
 export default categoryAndBrandService;

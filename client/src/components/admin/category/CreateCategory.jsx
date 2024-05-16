@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Card from "../../card/Card";
 import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { createCategory } from "../../../redux/features/cat&brands/CatsAndBrandsSlice";
+import {
+  createCategory,
+  getCategories,
+} from "../../../redux/features/cat&brands/CatsAndBrandsSlice";
 import { toast } from "react-toastify";
 import Loader from "../../loader/Loader";
 
-const CreateCategory = () => {
+const CreateCategory = ({ reloadCategory }) => {
   const [category, setCategory] = useState("");
 
   const { isLoading } = useSelector((state) => state.category);
@@ -22,6 +25,10 @@ const CreateCategory = () => {
     };
     dispatch(createCategory(categoryData));
     setCategory("");
+
+    // reload component
+    dispatch(getCategories());
+    reloadCategory();
   };
 
   return (

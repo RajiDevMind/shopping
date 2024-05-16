@@ -3,7 +3,7 @@ import categoryAndBrandService from "./CatsAndBrandService.jsx";
 import { toast } from "react-toastify";
 
 const initialState = {
-  category: [],
+  categories: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -38,6 +38,40 @@ const CatAndBrandsSlice = createSlice({
         state.isError = true;
         state.msg = action.payload;
         toast.success(action.payload);
+      })
+      // Get all categories
+      .addCase(getCategories.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.categories = action.payload;
+        console.log(action.payload);
+      })
+      .addCase(getCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.success(action.payload);
+      })
+      // Delete category
+      .addCase(deleteCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload);
+        console.log(action.payload);
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.success(action.payload);
       });
   },
 });
@@ -50,6 +84,48 @@ export const createCategory = createAsyncThunk(
       const responseData = await categoryAndBrandService.createCategory(
         categoryData
       );
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+// Get all categories
+export const getCategories = createAsyncThunk(
+  "category/getCategories",
+  async (_, thunkAPI) => {
+    try {
+      const responseData = await categoryAndBrandService.getCategories();
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+// Delete category
+export const deleteCategory = createAsyncThunk(
+  "category/deleteCategory",
+  async (slug, thunkAPI) => {
+    try {
+      const responseData = await categoryAndBrandService.deleteCategory(slug);
 
       return responseData;
     } catch (error) {
