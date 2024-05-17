@@ -3,6 +3,7 @@ import "./ProductForm.scss";
 import Card from "../../card/Card";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import UploadWidget from "./UploadWidget";
 
 const ProductForm = ({
   saveProduct,
@@ -13,10 +14,12 @@ const ProductForm = ({
   filteredBrands,
   description,
   setDescription,
+  files,
+  setFiles,
 }) => {
   return (
     <div className="add-product">
-      <h3>Upload widget placeholder</h3>
+      <UploadWidget files={files} setFiles={setFiles} />
 
       <Card cardClass={"card"}>
         <br />
@@ -74,6 +77,7 @@ const ProductForm = ({
             name="color"
             value={product?.color}
             onChange={handleInputChange}
+            required
           />
           <label htmlFor="name">Regular Price:</label>
           <input
@@ -82,6 +86,7 @@ const ProductForm = ({
             name="regularPrice"
             value={product?.regularPrice}
             onChange={handleInputChange}
+            required
           />
           <label htmlFor="name">Product Price:</label>
           <input
@@ -90,6 +95,7 @@ const ProductForm = ({
             name="price"
             value={product?.price}
             onChange={handleInputChange}
+            required
           />
           <label htmlFor="name">Product Quantity:</label>
           <input
@@ -98,6 +104,7 @@ const ProductForm = ({
             name="quantity"
             value={product?.quantity}
             onChange={handleInputChange}
+            required
           />
           <label>Description</label>
           <ReactQuill
