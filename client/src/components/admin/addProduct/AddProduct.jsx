@@ -7,6 +7,9 @@ import {
   getBrands,
   getCategories,
 } from "../../../redux/features/cat&brands/CatsAndBrandsSlice";
+import { toast } from "react-toastify";
+import { createProduct } from "../../../redux/features/products/ProductSlice";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -22,6 +25,7 @@ const AddProduct = () => {
   const [product, setProduct] = useState(initialState);
   const [description, setDescription] = useState("");
   const [filteredBrands, setFilteredBrands] = useState([]);
+  const [files, setFiles] = useState([]);
 
   const { name, category, brand, quantity, color, price, regularPrice } =
     product;
@@ -29,6 +33,7 @@ const AddProduct = () => {
   const { isLoading } = useSelector((state) => state.product);
   const { categories, brands } = useSelector((state) => state.category);
 
+  const navigate = useNavigate();
   // holding state to avoid empty data
   const dispatch = useDispatch();
   useEffect(() => {
@@ -52,10 +57,34 @@ const AddProduct = () => {
     setProduct({ ...product, [name]: value });
   };
 
+  const generateSKU = () => {
+    const letter = category.slice(0, 3).toUpperCase();
+    const number = Date.now();
+    const productSKU = letter + "-" + number;
+    return productSKU;
+  };
+
   const saveProduct = async (e) => {
     e.preventDefault();
-    console.log(product);
-    console.log(description);
+    if (!name || !description) {
+      return toast.error(
+        "All fields are required including product description"
+      );
+    }
+    const productData = {
+      name,
+      sku: generateSKU(category),
+      category,
+      brand,
+      quantity: Number(quantity),
+      color,
+      price,
+      regularPrice,
+      description,
+      //   image
+    };
+    await dispatch(createProduct(productData));
+    // navigate("/admin/view-products");
   };
 
   return (
@@ -73,6 +102,8 @@ const AddProduct = () => {
           filteredBrands={filteredBrands}
           description={description}
           setDescription={setDescription}
+          files={files}
+          setFiles={setFiles}
         />
       </div>
     </section>
