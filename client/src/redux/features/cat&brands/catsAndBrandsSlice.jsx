@@ -82,7 +82,6 @@ const CatAndBrandsSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         toast.success("Brand created Successful!");
-        console.log(action.payload);
       })
       .addCase(createBrand.rejected, (state, action) => {
         state.isLoading = false;
@@ -100,7 +99,7 @@ const CatAndBrandsSlice = createSlice({
         state.isError = false;
         state.brands = action.payload;
         toast.success(action.payload);
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(getBrands.rejected, (state, action) => {
         state.isLoading = false;
