@@ -64,12 +64,26 @@ const AddProduct = () => {
     return productSKU;
   };
 
+  // scrollTo top when certain conditions are not met
+  const scrollToPosition = (topsize) => {
+    window.scrollTo({
+      top: topsize,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
   const saveProduct = async (e) => {
     e.preventDefault();
     if (!name || !description) {
+      scrollToPosition(300);
       return toast.error(
-        "All fields are required including product description"
+        "All fields are required including product name and description"
       );
+    }
+    if (files.length <= 0) {
+      scrollToPosition(0);
+      return toast.error("Product image is required!");
     }
     const productData = {
       name,
@@ -81,10 +95,10 @@ const AddProduct = () => {
       price,
       regularPrice,
       description,
-      //   image
+      image: files,
     };
     await dispatch(createProduct(productData));
-    // navigate("/admin/view-products");
+    navigate("/admin/all-products");
   };
 
   return (

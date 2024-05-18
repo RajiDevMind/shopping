@@ -55,14 +55,12 @@ const UploadWidget = ({ files, setFiles }) => {
           return resp.json();
         })
         .then((data) => {
-          console.log(data);
           imageURLs.push(data.secure_url);
           setProgress(imageURLs.length);
 
           if (imageURLs.length === images.length) {
             setFiles((prevFiles) => prevFiles.concat(imageURLs));
             setUploading(false);
-            console.log(files);
             toast.success("Image upload completed!");
             setImages([]);
             setSelectedImages([]);
