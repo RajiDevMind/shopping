@@ -37,6 +37,26 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+export const getAllProducts = createAsyncThunk(
+  "product/getAllProducts",
+  async (_, thunkAPI) => {
+    try {
+      const responseData = await productService.getAllProducts();
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const ProductSlice = createSlice({
   name: "product",
   initialState,
@@ -58,11 +78,28 @@ const ProductSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.category = action.payload;
+        state.product = action.payload;
         toast.success("Product created Successful!");
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(createProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // get all products
+      .addCase(getAllProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.products = action.payload;
+        console.log(action.payload);
+      })
+      .addCase(getAllProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;

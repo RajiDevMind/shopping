@@ -9,8 +9,15 @@ const createProduct = async (productData) => {
   return resp.data;
 };
 
+// Get All Product
+const getAllProducts = async () => {
+  const resp = await axios.get(API_URL);
+  return resp.data;
+};
+
 const productService = {
   createProduct,
+  getAllProducts,
 };
 
 export default productService;
