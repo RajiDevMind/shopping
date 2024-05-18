@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import Card from "../../card/Card";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
+import { toast } from "react-toastify";
 
-const UploadWidget = () => {
+const uploadPreset = "dqmuli5h";
+const url = `https://api.cloudinary.com/v1_1/rajidevmind/image/upload`;
+
+const UploadWidget = ({ files, setFiles }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [images, setImages] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -29,6 +33,47 @@ const UploadWidget = () => {
     setSelectedImages(selectedImages.filter((img, index) => img !== image));
     setImages(images.filter((img, index) => index !== imageIndex));
     URL.revokeObjectURL(image);
+  };
+
+  // Uploading image to cloudinary
+  const uploadImg = (e) => {
+    setUploading(true);
+    let imageURLs = [];
+
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      let file = images[i];
+      formData.append("file", file);
+      formData.append("upload_preset", uploadPreset);
+      formData.append("folder", "Sellout-Images");
+
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((resp) => {
+          return resp.json();
+        })
+        .then((data) => {
+          console.log(data);
+          imageURLs.push(data.secure_url);
+          setProgress(imageURLs.length);
+
+          if (imageURLs.length === images.length) {
+            setFiles((prevFiles) => prevFiles.concat(imageURLs));
+            setUploading(false);
+            console.log(files);
+            toast.success("Image upload completed!");
+            setImages([]);
+            setSelectedImages([]);
+            setProgress(0);
+          }
+        })
+        .catch((error) => {
+          setUploading(false);
+          toast.error(error.msg);
+        });
+    }
   };
 
   return (
@@ -58,8 +103,15 @@ const UploadWidget = () => {
             </p>
           ) : (
             <div className="--center-all">
-              <button className="--btn --btn-danger btn-large">
-                Upload Image
+              <button
+                className="--btn --btn-danger btn-large"
+                disabled={uploading}
+                onClick={uploadImg}
+              >
+                {/* Conditionally rendering text to upload btn */}
+                {uploading
+                  ? `Upload ${progress} of ${images.length}`
+                  : `Upload ${images.length} image(s)`}
               </button>
             </div>
           ))}
