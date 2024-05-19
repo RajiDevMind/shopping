@@ -27,38 +27,15 @@ const initialState = {
 const AddProduct = () => {
   const [product, setProduct] = useState(initialState);
   const [description, setDescription] = useState("");
-  const [filteredBrands, setFilteredBrands] = useState([]);
   const [files, setFiles] = useState([]);
 
   const { name, category, brand, quantity, color, price, regularPrice } =
     product;
 
   const { isLoading, msg } = useSelector((state) => state.product);
-  const { categories, brands } = useSelector((state) => state.category);
 
   const navigate = useNavigate();
-  // holding state to avoid empty data
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getBrands());
-  }, [dispatch]);
-
-  // filter brands based on selectedCategory
-  const filterBrands = (selectedCategory) => {
-    const newBrands = brands.filter(
-      (brand) => brand.category === selectedCategory
-    );
-    setFilteredBrands(newBrands);
-  };
-  useEffect(() => {
-    filterBrands(category);
-  }, [category]);
-
-  const handleInputChange = async (e) => {
-    const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
-  };
 
   const generateSKU = () => {
     const letter = category.slice(0, 3).toUpperCase();
@@ -78,20 +55,27 @@ const AddProduct = () => {
 
   const saveProduct = async (e) => {
     e.preventDefault();
-    if (!name || !description) {
+    // Validate image's'
+    if (files.length <= 0) {
+      scrollToPosition(0);
+      return toast.error("Product image is required!");
+    }
+
+    if (!name) {
       scrollToPosition(300);
-      return toast.error("All fields are required!");
+      return toast.error("Product name is required!");
     }
 
     if (category === "Select Category" || brand === "Select brand") {
       scrollToPosition(420);
       return toast.error("Select Category and its Brand?");
     }
-    // Validate image's'
-    if (files.length <= 0) {
-      scrollToPosition(0);
-      return toast.error("Product image is required!");
+
+    if (!description) {
+      scrollToPosition(900);
+      return toast.error("Product description is required!");
     }
+
     const productData = {
       name,
       sku: generateSKU(category),
@@ -123,11 +107,9 @@ const AddProduct = () => {
 
         <ProductForm
           saveProduct={saveProduct}
-          product={product}
-          categories={categories}
-          handleInputChange={handleInputChange}
           isEditing={false}
-          filteredBrands={filteredBrands}
+          product={product}
+          setProduct={setProduct}
           description={description}
           setDescription={setDescription}
           files={files}

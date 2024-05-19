@@ -143,7 +143,6 @@ const ProductSlice = createSlice({
         if (action.payload && action.payload.hasOwnProperty("msg")) {
           toast.error(action.payload.msg);
         } else {
-          console.log(action.payload);
           state.msg = "Product created Successful!";
           toast.success("Product created Successful!");
         }
@@ -217,7 +216,6 @@ const ProductSlice = createSlice({
         if (action.payload && action.payload.hasOwnProperty("msg")) {
           toast.error(action.payload.msg);
         } else {
-          console.log(action.payload);
           state.msg = "Product updated Successful!";
           toast.success("Product updated Successful!");
         }
