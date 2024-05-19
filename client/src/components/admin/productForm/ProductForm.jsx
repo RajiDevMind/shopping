@@ -32,8 +32,8 @@ const ProductForm = ({
           <label>Product Images:</label>
           <div className="slide-container">
             <aside>
-              {files.length > 0 &&
-                files.map((img) => (
+              {files?.length > 0 &&
+                files?.map((img) => (
                   <div key={img} className="thumbnail">
                     <img src={img} alt="Product Image" height={100} />
                     <div>
@@ -45,7 +45,7 @@ const ProductForm = ({
                     </div>
                   </div>
                 ))}
-              {files.length <= 0 && (
+              {files?.length <= 0 && (
                 <p className="--m">No image set for this product yet!</p>
               )}
             </aside>

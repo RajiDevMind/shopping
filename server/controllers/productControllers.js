@@ -100,7 +100,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       throw new Error("Product not found!");
     }
     const updatedProduct = await Product.findByIdAndUpdate(
-      { id },
+      id,
       {
         name,
         category,
@@ -120,7 +120,7 @@ const updateProduct = asyncHandler(async (req, res) => {
         runValidators: true,
       }
     );
-    res.status(201).json(updatedProduct);
+    return res.status(200).json(updatedProduct);
   } catch (error) {
     res.status(500);
     throw new Error("Internal Server Error!");

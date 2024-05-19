@@ -23,7 +23,7 @@ const Admin = () => {
 
           <Route path="add-product" element={<AddProduct />} />
           <Route path="all-products" element={<ViewProduct />} />
-          <Route path="edit-product" element={<EditProduct />} />
+          <Route path="edit-product/:id" element={<EditProduct />} />
         </Routes>
       </div>
     </div>

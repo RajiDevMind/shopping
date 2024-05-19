@@ -77,6 +77,46 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
+export const getSingleProduct = createAsyncThunk(
+  "product/getSingleProduct",
+  async (id, thunkAPI) => {
+    try {
+      const responseData = await productService.getSingleProduct(id);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "product/updateProduct",
+  async ({ id, productData }, thunkAPI) => {
+    try {
+      const responseData = await productService.updateProduct(id, productData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const ProductSlice = createSlice({
   name: "product",
   initialState,
@@ -146,10 +186,54 @@ const ProductSlice = createSlice({
         state.isError = true;
         state.msg = action.payload;
         toast.error(action.payload);
+      })
+      // Get Single product
+      .addCase(getSingleProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.product = action.payload;
+        console.log(action.payload);
+      })
+      .addCase(getSingleProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Update/patch product
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+
+        // intelligently: handle error from product model
+        if (action.payload && action.payload.hasOwnProperty("msg")) {
+          toast.error(action.payload.msg);
+        } else {
+          console.log(action.payload);
+          state.msg = "Product updated Successful!";
+          toast.success("Product updated Successful!");
+        }
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
       });
   },
 });
 
 export const { RESET_PRODUCT } = ProductSlice.actions;
+
+export const selectProduct = (state) => state.product.product; // product indicate state slice & product = null
+export const selectIsLoading = (state) => state.product.isLoading;
 
 export default ProductSlice.reducer;
