@@ -9,6 +9,8 @@ import { AiOutlineEye } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
 import { BsTrash } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { shortenText } from "../../../utils";
+import ReactPaginate from "react-paginate";
 
 const ViewProduct = () => {
   const [search, setSearch] = useState("");
@@ -23,6 +25,21 @@ const ViewProduct = () => {
       dispatch(getAllProducts());
     }
   }, [isLoggedIn, dispatch]);
+
+  // Pagination Start Here
+  const itemsPerPage = 6;
+  const [itemOffset, setItemOffset] = useState(0);
+
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = products.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(products.length / itemsPerPage);
+
+  // Invoke when user click to request another page.
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % products.length;
+    setItemOffset(newOffset);
+  };
+  // Pagination Ends Here
 
   return (
     <section>
@@ -62,12 +79,13 @@ const ViewProduct = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product, index) => {
+                {/* {products.map((product, index) => { */}
+                {currentItems.map((product, index) => {
                   const { _id, name, category, price, quantity } = product;
                   return (
                     <tr key={_id}>
                       <td>{index + 1}</td>
-                      <td>{name}</td>
+                      <td>{shortenText(name, 16)}</td>
                       <td>{category}</td>
                       <td>${price}</td>
                       <td>{quantity}</td>
@@ -94,6 +112,20 @@ const ViewProduct = () => {
             </table>
           )}
         </div>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< prev"
+          renderOnZeroPageCount={null}
+          containerClassName="pagination"
+          pageLinkClassName="page-num"
+          previousLinkClassName="page-num"
+          nextLinkClassName="page-num"
+          activeLinkClassName="activePage"
+        />
       </div>
     </section>
   );
