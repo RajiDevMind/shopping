@@ -8,7 +8,10 @@ import {
   getCategories,
 } from "../../../redux/features/cat&brands/CatsAndBrandsSlice";
 import { toast } from "react-toastify";
-import { createProduct } from "../../../redux/features/products/ProductSlice";
+import {
+  RESET_PRODUCT,
+  createProduct,
+} from "../../../redux/features/products/ProductSlice";
 import { useNavigate } from "react-router-dom";
 
 const initialState = {
@@ -30,7 +33,7 @@ const AddProduct = () => {
   const { name, category, brand, quantity, color, price, regularPrice } =
     product;
 
-  const { isLoading } = useSelector((state) => state.product);
+  const { isLoading, msg } = useSelector((state) => state.product);
   const { categories, brands } = useSelector((state) => state.category);
 
   const navigate = useNavigate();
@@ -77,10 +80,14 @@ const AddProduct = () => {
     e.preventDefault();
     if (!name || !description) {
       scrollToPosition(300);
-      return toast.error(
-        "All fields are required including product name and description"
-      );
+      return toast.error("All fields are required!");
     }
+
+    if (category === "Select Category" || brand === "Select brand") {
+      scrollToPosition(420);
+      return toast.error("Select Category and its Brand?");
+    }
+    // Validate image's'
     if (files.length <= 0) {
       scrollToPosition(0);
       return toast.error("Product image is required!");
@@ -98,8 +105,15 @@ const AddProduct = () => {
       image: files,
     };
     await dispatch(createProduct(productData));
-    navigate("/admin/all-products");
+    // navigate("/admin/all-products");
   };
+  // useEffect, to make sure product was created bfor navigating
+  useEffect(() => {
+    if (msg === "Product created Successful!") {
+      navigate("/admin/all-products");
+    }
+    dispatch(RESET_PRODUCT());
+  }, [msg, navigate, dispatch]);
 
   return (
     <section>

@@ -57,6 +57,26 @@ export const getAllProducts = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "product/deleteProduct",
+  async (id, thunkAPI) => {
+    try {
+      const responseData = await productService.deleteProduct(id);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const ProductSlice = createSlice({
   name: "product",
   initialState,
@@ -78,9 +98,15 @@ const ProductSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.product = action.payload;
-        toast.success("Product created Successful!");
-        // console.log(action.payload);
+
+        // intelligently: handle error from product model
+        if (action.payload && action.payload.hasOwnProperty("msg")) {
+          toast.error(action.payload.msg);
+        } else {
+          console.log(action.payload);
+          state.msg = "Product created Successful!";
+          toast.success("Product created Successful!");
+        }
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.isLoading = false;
@@ -97,9 +123,25 @@ const ProductSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.products = action.payload;
-        console.log(action.payload);
+        // console.log(action.payload);
       })
       .addCase(getAllProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Delete product
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success("Product Deleted Successfully");
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;

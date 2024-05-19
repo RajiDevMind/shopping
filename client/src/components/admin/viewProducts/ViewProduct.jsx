@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./ViewProducts.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../../redux/features/auth/authSlice";
-import { getAllProducts } from "../../../redux/features/products/ProductSlice";
+import {
+  deleteProduct,
+  getAllProducts,
+} from "../../../redux/features/products/ProductSlice";
 import Search from "../../search/Search";
 import { Spinner } from "../../loader/Loader";
 import { AiOutlineEye } from "react-icons/ai";
@@ -11,6 +14,8 @@ import { BsTrash } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { shortenText } from "../../../utils";
 import ReactPaginate from "react-paginate";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const ViewProduct = () => {
   const [search, setSearch] = useState("");
@@ -26,6 +31,29 @@ const ViewProduct = () => {
     }
   }, [isLoggedIn, dispatch]);
 
+  // react-confirm-alert to delete product
+  const confirmDelete = (id) => {
+    confirmAlert({
+      title: "Delete Product",
+      message: "Are you sure to delete this product?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => delProduct(id),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+  //delete product
+  const delProduct = async (id) => {
+    await dispatch(deleteProduct(id));
+    await dispatch(getAllProducts());
+  };
+
   // Pagination Start Here
   const itemsPerPage = 6;
   const [itemOffset, setItemOffset] = useState(0);
@@ -39,7 +67,7 @@ const ViewProduct = () => {
     const newOffset = (event.selected * itemsPerPage) % products.length;
     setItemOffset(newOffset);
   };
-  // Pagination Ends Here
+  // Pagination End!
 
   return (
     <section>
@@ -102,7 +130,11 @@ const ViewProduct = () => {
                           </Link>
                         </span>
                         <span>
-                          <BsTrash size={25} color={"red"} />
+                          <BsTrash
+                            size={25}
+                            color={"red"}
+                            onClick={() => confirmDelete(_id)}
+                          />
                         </span>
                       </td>
                     </tr>
