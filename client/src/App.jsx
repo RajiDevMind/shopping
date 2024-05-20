@@ -14,6 +14,8 @@ import { getLoginStatus, getUser } from "./redux/features/auth/authSlice";
 import Profile from "./pages/profile/Profile";
 import Admin from "./pages/Admin/Admin";
 import AdminOnlyRoute from "./components/hiddenLink/AdminOnlyRoute";
+import NotFound from "./pages/notfound/NotFound";
+import Product from "./pages/shop/Product";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
@@ -44,6 +46,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/shop" element={<Product />} />
 
             <Route
               path="/admin/*"
@@ -53,6 +56,7 @@ const App = () => {
                 </AdminOnlyRoute>
               }
             />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </BrowserRouter>
