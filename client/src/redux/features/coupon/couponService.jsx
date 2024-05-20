@@ -14,9 +14,21 @@ const getAllCoupons = async () => {
   return resp.data;
 };
 
+const getSingleCoupon = async (couponName) => {
+  const resp = await axios.get(API_URL + couponName);
+  return resp.data;
+};
+
+const deleteCoupon = async (id) => {
+  const resp = await axios.delete(API_URL + id);
+  return resp.data.msg;
+};
+
 const couponService = {
   createCoupon,
   getAllCoupons,
+  getSingleCoupon,
+  deleteCoupon,
 };
 
 export default couponService;

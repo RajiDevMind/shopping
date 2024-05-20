@@ -1,18 +1,46 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCoupons } from "../../../redux/features/coupon/couponSlice";
+import {
+  deleteCoupon,
+  getAllCoupons,
+  getSingleCoupon,
+} from "../../../redux/features/coupon/couponSlice";
 import { FaTrashAlt } from "react-icons/fa";
 import "./Coupon.scss";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const CouponList = () => {
-  const { isLoading, coupons } = useSelector((state) => state.coupon);
+  const { isLoading, coupon, coupons } = useSelector((state) => state.coupon);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllCoupons());
+    // dispatch(getSingleCoupon("DGDGS2344WE")); // get coupon by its name
   }, [dispatch]);
 
+  // react-confirm-alert to delete category
+  const confirmDelete = (id) => {
+    confirmAlert({
+      title: "Delete Coupon",
+      message: "Are you sure to delete this Coupon?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => deleteCoup(id),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+  const deleteCoup = async (id) => {
+    await dispatch(deleteCoupon(id));
+    await dispatch(getAllCoupons());
+  };
   return (
     <div className="--mb2">
       <h3>All coupons</h3>
@@ -46,7 +74,7 @@ const CouponList = () => {
                       <FaTrashAlt
                         size={20}
                         color="red"
-                        // onClick={() => confirmDelete(slug)}
+                        onClick={() => confirmDelete(_id)}
                       />
                     </td>
                   </tr>

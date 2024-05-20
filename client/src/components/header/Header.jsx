@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/HiddenLink";
 import NavUsername from "../../pages/profile/NavUsername";
+import { AdminOnlyLink } from "../hiddenLink/AdminOnlyRoute";
 
 export const logo = (
   <div className={styles.logo}>
@@ -88,9 +89,11 @@ const Header = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/admin/home" className={activeLink}>
-                | Admin
-              </NavLink>
+              <AdminOnlyLink>
+                <NavLink to="/admin/home" className={activeLink}>
+                  | Admin
+                </NavLink>
+              </AdminOnlyLink>
             </li>
           </ul>
 

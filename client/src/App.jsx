@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLoginStatus, getUser } from "./redux/features/auth/authSlice";
 import Profile from "./pages/profile/Profile";
 import Admin from "./pages/Admin/Admin";
+import AdminOnlyRoute from "./components/hiddenLink/AdminOnlyRoute";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
@@ -44,7 +45,14 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
 
-            <Route path="/admin/*" element={<Admin />} />
+            <Route
+              path="/admin/*"
+              element={
+                <AdminOnlyRoute>
+                  <Admin />
+                </AdminOnlyRoute>
+              }
+            />
           </Routes>
           <Footer />
         </BrowserRouter>
