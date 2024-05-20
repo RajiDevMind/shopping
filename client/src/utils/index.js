@@ -11,3 +11,9 @@ export const shortenText = (text, n) => {
 export const validateEmail = (email) => {
   return email.match(/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/);
 };
+
+export const futureDate = (addDate) => {
+  const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + addDate);
+  return currentDate;
+};
