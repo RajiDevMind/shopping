@@ -22,7 +22,7 @@ const ProductItem = ({
 
   return (
     <Card cardClass={grid ? `${styles.grid}` : `${styles.list}`}>
-      <Link to={`product-details/${_id}`}>
+      <Link to={`/product-details/${_id}`}>
         <div className={styles.img}>
           <img src={image[0]} alt={name} />
         </div>

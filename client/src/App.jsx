@@ -16,6 +16,7 @@ import Admin from "./pages/Admin/Admin";
 import AdminOnlyRoute from "./components/hiddenLink/AdminOnlyRoute";
 import NotFound from "./pages/notfound/NotFound";
 import Product from "./pages/shop/Product";
+import ProductDetails from "./components/product/productDetails/ProductDetails";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/shop" element={<Product />} />
+            <Route path="/product-details/:id" element={<ProductDetails />} />
 
             <Route
               path="/admin/*"
