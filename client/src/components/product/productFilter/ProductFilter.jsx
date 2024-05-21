@@ -49,6 +49,12 @@ const ProductFilter = () => {
   }, [dispatch, products]);
   // console.log(minPrice, maxPrice);
 
+  const clearFilter = () => {
+    setCategory("All");
+    setBrand("All");
+    setPrice([minPrice, maxPrice]); // from productSlice not filterSlice
+  };
+
   return (
     <div className={styles.filter}>
       <h4>Categories</h4>
@@ -100,6 +106,11 @@ const ProductFilter = () => {
           onChange={(price) => setPrice(price)}
         />
       </div>
+      <br />
+      <br />
+      <button className="--btn --btn-danger" onClick={clearFilter}>
+        Clear Filter
+      </button>
     </div>
   );
 };
