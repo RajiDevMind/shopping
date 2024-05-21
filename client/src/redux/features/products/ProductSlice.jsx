@@ -127,6 +127,20 @@ const ProductSlice = createSlice({
       state.isLoading = false;
       state.msg = "";
     },
+    // this function is used to set max and min price which was initially set to null
+    GET_PRICE_RANGE(state, action) {
+      const { products } = action.payload;
+      const array = [];
+      products.map((product, index) => {
+        const price = product.price;
+        return array.push(price);
+      });
+      const max = Math.max(...array);
+      const min = Math.min(...array);
+
+      state.maxPrice = max;
+      state.minPrice = min;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -229,7 +243,7 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { RESET_PRODUCT } = ProductSlice.actions;
+export const { RESET_PRODUCT, GET_PRICE_RANGE } = ProductSlice.actions;
 
 export const selectProduct = (state) => state.product.product; // product indicate state slice & product = null
 export const selectIsLoading = (state) => state.product.isLoading;
