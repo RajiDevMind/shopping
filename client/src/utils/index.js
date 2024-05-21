@@ -17,3 +17,17 @@ export const futureDate = (addDate) => {
   currentDate.setHours(currentDate.getHours() + addDate);
   return currentDate;
 };
+
+export const calculateAverageRatings = (ratings) => {
+  if (!Array.isArray(ratings) || ratings.length === 0) {
+    return 0;
+  }
+  let totalStars = 0;
+  for (let i = 0; i < ratings.length; i++) {
+    let rating = ratings[i];
+    if (rating.hasOwnProperty("star")) {
+      totalStars += rating.star;
+    }
+  }
+  return totalStars / ratings.length;
+};
