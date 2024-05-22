@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Cart.module.scss";
 import "./Radio.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_TO_CART,
+  CALCULATE_TOTAL_QUANTITY,
   CLEAR_CART,
   DECREASE_CART,
   REMOVE_FROM_CART,
   selectCartItems,
+  selectCartTotalAmount,
+  selectCartTotalQuantity,
 } from "../../redux/features/cart/cart";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { FaTrashAlt } from "react-icons/fa";
+import Card from "../../components/card/Card";
 
 const Cart = () => {
   const cartItems = useSelector(selectCartItems);
+  const cartTotalQuantity = useSelector(selectCartTotalQuantity);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,7 +29,7 @@ const Cart = () => {
   const confirmDelete = (carts) => {
     confirmAlert({
       title: "Delete Product",
-      message: "Are you sure to delete this product?",
+      message: "Are you sure to delete this product from your cart?",
       buttons: [
         {
           label: "Delete",
@@ -70,6 +75,10 @@ const Cart = () => {
     dispatch(CLEAR_CART());
     navigate("/shop");
   };
+
+  useEffect(() => {
+    dispatch(CALCULATE_TOTAL_QUANTITY());
+  }, [dispatch, cartItems]);
 
   return (
     <section>
@@ -156,6 +165,12 @@ const Cart = () => {
                 <div>
                   <Link to={"/shop"}>&larr; Continue Shopping</Link>
                 </div>
+                <br />
+                <Card cardClass={styles.card}>
+                  <p>
+                    <b>{`Cart Item(s) ${cartTotalQuantity}`}</b>
+                  </p>
+                </Card>
               </div>
             </div>
           </>

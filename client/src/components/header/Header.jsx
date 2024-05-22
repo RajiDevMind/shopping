@@ -4,11 +4,12 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/HiddenLink";
 import NavUsername from "../../pages/profile/NavUsername";
 import { AdminOnlyLink } from "../hiddenLink/AdminOnlyRoute";
+import { selectCartTotalQuantity } from "../../redux/features/cart/cart";
 
 export const logo = (
   <div className={styles.logo}>
@@ -25,6 +26,8 @@ const activeLink = ({ isActive }) => (isActive ? `${styles.active}` : "");
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const cartTotalQuantity = useSelector(selectCartTotalQuantity);
 
   // state to fix navbar
   const [scrollPage, setScrollPage] = useState(false);
@@ -57,7 +60,7 @@ const Header = () => {
       <NavLink to={"/cart"}>
         Cart
         <FaShoppingCart size={22} />
-        <p>0</p>
+        <p>{cartTotalQuantity}</p>
       </NavLink>
     </span>
   );
