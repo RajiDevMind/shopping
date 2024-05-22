@@ -9,7 +9,11 @@ import { calculateAverageRatings } from "../../../utils";
 import { toast } from "react-toastify";
 import DOMPurify from "dompurify";
 import Card from "../../card/Card";
-import { ADD_TO_CART } from "../../../redux/features/cart/cart";
+import {
+  ADD_TO_CART,
+  DECREASE_CART,
+  selectCartItems,
+} from "../../../redux/features/cart/cart";
 
 const ProductDetails = () => {
   const [imgIndex, setImgIndex] = useState(0);
@@ -18,6 +22,12 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
 
   const { product, isLoading } = useSelector((state) => state.product);
+  const cartItems = useSelector(selectCartItems);
+
+  const carts = cartItems.find((cart) => cart._id === id);
+  const isCartAdded = cartItems.findIndex((cart) => {
+    return cart._id === id;
+  });
 
   useEffect(() => {
     dispatch(getSingleProduct(id));
@@ -43,6 +53,10 @@ const ProductDetails = () => {
 
   const addToCart = (product) => {
     dispatch(ADD_TO_CART(product));
+  };
+
+  const decreaseCart = (product) => {
+    dispatch(DECREASE_CART(product));
   };
 
   const averageRating = calculateAverageRatings(product?.ratings);
@@ -128,6 +142,28 @@ const ProductDetails = () => {
                     <b>Sold:</b>
                   </p>
                   <p>{product?.sold}</p>
+                </div>
+                {/* plus and minus to reduce or increase product count */}
+                <div className={styles.count}>
+                  {isCartAdded < 0 ? null : (
+                    <>
+                      <button
+                        className="--btn"
+                        onClick={() => decreaseCart(product)}
+                      >
+                        -
+                      </button>
+                      <p>
+                        <b>{carts?.cartQuantity}</b>
+                      </p>
+                      <button
+                        className="--btn"
+                        onClick={() => addToCart(product)}
+                      >
+                        +
+                      </button>
+                    </>
+                  )}
                 </div>
                 <div className="--flex-start">
                   {product?.quantity > 0 ? (

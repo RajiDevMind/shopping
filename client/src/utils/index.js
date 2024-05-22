@@ -31,3 +31,12 @@ export const calculateAverageRatings = (ratings) => {
   }
   return totalStars / ratings.length;
 };
+
+export const getCartQuantityById = (products, id) => {
+  for (let i = 0; i < products.length; i++) {
+    if (products[i]._id === id) {
+      return products[i].cartQuantity;
+    }
+  }
+  return 0; // if _id not found return default value. 0
+};
