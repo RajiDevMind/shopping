@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_TO_CART,
+  CALCULATE_SUBTOTAL,
   CALCULATE_TOTAL_QUANTITY,
   CLEAR_CART,
   DECREASE_CART,
@@ -21,6 +22,7 @@ import Card from "../../components/card/Card";
 const Cart = () => {
   const cartItems = useSelector(selectCartItems);
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
+  const cartTotalAmount = useSelector(selectCartTotalAmount);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -78,6 +80,7 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(CALCULATE_TOTAL_QUANTITY());
+    dispatch(CALCULATE_SUBTOTAL());
   }, [dispatch, cartItems]);
 
   return (
@@ -170,6 +173,10 @@ const Cart = () => {
                   <p>
                     <b>{`Cart Item(s) ${cartTotalQuantity}`}</b>
                   </p>
+                  <div className={styles.text}>
+                    <h4>Subtotal:</h4>
+                    <h3>{`$${cartTotalAmount?.toFixed(2)}`}</h3>
+                  </div>
                 </Card>
               </div>
             </div>

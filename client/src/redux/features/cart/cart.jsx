@@ -102,6 +102,18 @@ const cart = createSlice({
       }, 0);
       state.cartTotalQuantity = totalQuantity;
     },
+    CALCULATE_SUBTOTAL(state, action) {
+      const array = [];
+      state.cartItems?.map((item) => {
+        const { price, cartQuantity } = item;
+        const cartItemAmount = price * cartQuantity;
+        return array.push(cartItemAmount);
+      });
+      const totalAmount = array.reduce((a, b) => {
+        return a + b;
+      }, 0);
+      state.cartTotalAmount = totalAmount;
+    },
   },
 });
 
@@ -111,6 +123,7 @@ export const {
   REMOVE_FROM_CART,
   CLEAR_CART,
   CALCULATE_TOTAL_QUANTITY,
+  CALCULATE_SUBTOTAL,
 } = cart.actions;
 
 export const selectCartItems = (state) => state.cart.cartItems;
