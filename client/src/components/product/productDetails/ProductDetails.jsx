@@ -12,6 +12,7 @@ import Card from "../../card/Card";
 import {
   ADD_TO_CART,
   DECREASE_CART,
+  saveCartDB,
   selectCartItems,
 } from "../../../redux/features/cart/cartSlice";
 
@@ -53,10 +54,16 @@ const ProductDetails = () => {
 
   const addToCart = (product) => {
     dispatch(ADD_TO_CART(product));
+    dispatch(
+      saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
+    );
   };
 
   const decreaseCart = (product) => {
     dispatch(DECREASE_CART(product));
+    dispatch(
+      saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
+    );
   };
 
   const averageRating = calculateAverageRatings(product?.ratings);

@@ -8,6 +8,7 @@ import { RESET_AUTH, login } from "../../redux/features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { validateEmail } from "../../utils";
 import Loader from "../../components/loader/Loader";
+import { getCartDB } from "../../redux/features/cart/cartSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -40,8 +41,9 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess && isLoggedIn) {
-      navigate("/");
+      // navigate("/");
 
+      dispatch(getCartDB());
       dispatch(RESET_AUTH());
     }
   }, [isSuccess, isLoggedIn, navigate, dispatch]);

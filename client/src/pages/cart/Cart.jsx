@@ -10,6 +10,7 @@ import {
   CLEAR_CART,
   DECREASE_CART,
   REMOVE_FROM_CART,
+  saveCartDB,
   selectCartItems,
   selectCartTotalAmount,
   selectCartTotalQuantity,
@@ -63,18 +64,28 @@ const Cart = () => {
 
   const addToCart = (carts) => {
     dispatch(ADD_TO_CART(carts));
+    dispatch(
+      saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
+    );
   };
 
   const decreaseCart = (carts) => {
     dispatch(DECREASE_CART(carts));
+    dispatch(
+      saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
+    );
   };
 
   const removeCart = (carts) => {
     dispatch(REMOVE_FROM_CART(carts));
+    dispatch(
+      saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
+    );
   };
 
   const clearCarts = () => {
     dispatch(CLEAR_CART());
+    dispatch(saveCartDB({ cartItems: [] }));
     navigate("/shop");
   };
 

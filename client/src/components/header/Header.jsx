@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Header.module.scss";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
@@ -9,7 +9,11 @@ import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/HiddenLink";
 import NavUsername from "../../pages/profile/NavUsername";
 import { AdminOnlyLink } from "../hiddenLink/AdminOnlyRoute";
-import { selectCartTotalQuantity } from "../../redux/features/cart/cartSlice";
+import {
+  CALCULATE_TOTAL_QUANTITY,
+  selectCartItems,
+  selectCartTotalQuantity,
+} from "../../redux/features/cart/cartSlice";
 
 export const logo = (
   <div className={styles.logo}>
@@ -27,6 +31,7 @@ const activeLink = ({ isActive }) => (isActive ? `${styles.active}` : "");
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
 
+  const cartItems = useSelector(selectCartItems);
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
 
   // state to fix navbar
@@ -54,6 +59,10 @@ const Header = () => {
     await dispatch(RESET_AUTH());
     navigate("/login");
   };
+
+  useEffect(() => {
+    dispatch(CALCULATE_TOTAL_QUANTITY());
+  }, [dispatch, cartItems]);
 
   const cart = (
     <span className={styles.cart}>

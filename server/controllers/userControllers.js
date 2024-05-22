@@ -155,7 +155,7 @@ const saveCart = asyncHandler(async (req, res) => {
   if (user) {
     user.cartItems = cartItems;
     user.save();
-    return res.status(200).json({ msg: "Cart added successfully!" });
+    return res.status(200).json({ msg: "Cart Saved!" });
   } else {
     res.status(400);
     throw new Error("User not found!");
