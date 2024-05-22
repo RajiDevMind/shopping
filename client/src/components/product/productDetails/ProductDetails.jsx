@@ -8,6 +8,8 @@ import ProductRating from "../productRating/ProductRating";
 import { calculateAverageRatings } from "../../../utils";
 import { toast } from "react-toastify";
 import DOMPurify from "dompurify";
+import Card from "../../card/Card";
+import { ADD_TO_CART } from "../../../redux/features/cart/cart";
 
 const ProductDetails = () => {
   const [imgIndex, setImgIndex] = useState(0);
@@ -37,6 +39,11 @@ const ProductDetails = () => {
     }
     return () => clearInterval(slideInterval);
   }, [imgIndex, product, slideInterval]);
+  // slider, flipper ends here
+
+  const addToCart = (product) => {
+    dispatch(ADD_TO_CART(product));
+  };
 
   const averageRating = calculateAverageRatings(product?.ratings);
 
@@ -124,7 +131,12 @@ const ProductDetails = () => {
                 </div>
                 <div className="--flex-start">
                   {product?.quantity > 0 ? (
-                    <button className="--btn --btn-primary">ADD TO CART</button>
+                    <button
+                      className="--btn --btn-primary"
+                      onClick={() => addToCart(product)}
+                    >
+                      ADD TO CART
+                    </button>
                   ) : (
                     <button
                       className="--btn --btn-red"
@@ -148,6 +160,10 @@ const ProductDetails = () => {
             </div>
           </>
         )}
+        {/* Review section */}
+        <Card cardClass={styles.card}>
+          <h3>Product Reviews?</h3>
+        </Card>
       </div>
     </section>
   );
