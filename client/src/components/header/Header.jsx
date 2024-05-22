@@ -9,7 +9,7 @@ import { RESET_AUTH, logout } from "../../redux/features/auth/authSlice";
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/HiddenLink";
 import NavUsername from "../../pages/profile/NavUsername";
 import { AdminOnlyLink } from "../hiddenLink/AdminOnlyRoute";
-import { selectCartTotalQuantity } from "../../redux/features/cart/cart";
+import { selectCartTotalQuantity } from "../../redux/features/cart/cartSlice";
 
 export const logo = (
   <div className={styles.logo}>

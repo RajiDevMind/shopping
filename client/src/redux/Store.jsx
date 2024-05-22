@@ -4,7 +4,7 @@ import categoryReducer from "./features/cat&brands/CatsAndBrandsSlice";
 import productReducer from "./features/products/ProductSlice";
 import filterReducer from "./features/products/filterSlice";
 import couponReducer from "./features/coupon/couponSlice";
-import cartReducer from "./features/cart/cart";
+import cartReducer from "./features/cart/cartSlice";
 
 export const store = configureStore({
   reducer: {

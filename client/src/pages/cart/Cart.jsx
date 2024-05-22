@@ -13,7 +13,7 @@ import {
   selectCartItems,
   selectCartTotalAmount,
   selectCartTotalQuantity,
-} from "../../redux/features/cart/cart";
+} from "../../redux/features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { FaTrashAlt } from "react-icons/fa";

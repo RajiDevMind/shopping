@@ -146,6 +146,33 @@ const add_Image = asyncHandler(async (req, res) => {
   res.status(200).json(addImage);
 });
 
+// Save User CartItems
+const saveCart = asyncHandler(async (req, res) => {
+  const { cartItems } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.cartItems = cartItems;
+    user.save();
+    return res.status(200).json({ msg: "Cart added successfully!" });
+  } else {
+    res.status(400);
+    throw new Error("User not found!");
+  }
+});
+
+const getCartItems = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    return res.status(200).json(user.cartItems);
+  } else {
+    res.status(400);
+    throw new Error("User not found!");
+  }
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -154,4 +181,6 @@ module.exports = {
   getLoginStatus,
   updateUser,
   add_Image,
+  saveCart,
+  getCartItems,
 };

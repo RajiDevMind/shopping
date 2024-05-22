@@ -13,7 +13,7 @@ import {
   ADD_TO_CART,
   DECREASE_CART,
   selectCartItems,
-} from "../../../redux/features/cart/cart";
+} from "../../../redux/features/cart/cartSlice";
 
 const ProductDetails = () => {
   const [imgIndex, setImgIndex] = useState(0);

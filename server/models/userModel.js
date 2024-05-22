@@ -38,6 +38,9 @@ const userSchema = mongoose.Schema({
     type: Object,
     // address, state, country
   },
+  cartItems: {
+    type: [Object],
+  },
 });
 
 // Encrypt users password b4 sending to DB

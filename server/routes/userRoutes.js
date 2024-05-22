@@ -9,6 +9,8 @@ const {
   getLoginStatus,
   updateUser,
   add_Image,
+  saveCart,
+  getCartItems,
 } = require("../controllers/userControllers");
 
 router.post("/register", registerUser);
@@ -18,5 +20,9 @@ router.get("/get-user", auth, getUser);
 router.get("/status", getLoginStatus);
 router.patch("/update-user", auth, updateUser);
 router.patch("/add-image", auth, add_Image);
+
+// Storing Cart Items from the user
+router.post("/saveCart", auth, saveCart);
+router.get("/getCartItems", auth, getCartItems);
 
 module.exports = router;
