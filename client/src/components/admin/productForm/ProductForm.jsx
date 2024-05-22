@@ -185,19 +185,20 @@ const ProductForm = ({
 
 ProductForm.modules = {
   toolbar: [
-    [{ header: [1, 2, false] }],
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ size: [] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ align: [] }],
+    [{ color: [] }, { background: [] }],
     [
       { list: "ordered" },
       { list: "bullet" },
       { indent: "-1" },
       { indent: "+1" },
     ],
-    ["link", "image"],
     ["clean"],
   ],
 };
-
 ProductForm.formats = [
   "header",
   "font",
@@ -207,12 +208,16 @@ ProductForm.formats = [
   "underline",
   "strike",
   "blockquote",
+  "color",
+  "background",
   "list",
   "bullet",
   "indent",
   "link",
+  "video",
   "image",
-  "color",
+  "code-block",
+  "align",
 ];
 
 export default ProductForm;
