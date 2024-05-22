@@ -1,12 +1,167 @@
 import React from "react";
 import styles from "./Cart.module.scss";
 import "./Radio.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  ADD_TO_CART,
+  CLEAR_CART,
+  DECREASE_CART,
+  REMOVE_FROM_CART,
+  selectCartItems,
+} from "../../redux/features/cart/cart";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { FaTrashAlt } from "react-icons/fa";
 
 const Cart = () => {
+  const cartItems = useSelector(selectCartItems);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // react-confirm-alert to delete category
+  const confirmDelete = (carts) => {
+    confirmAlert({
+      title: "Delete Product",
+      message: "Are you sure to delete this product?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => removeCart(carts),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+  const confirmToClear = () => {
+    confirmAlert({
+      title: "Clear All Products",
+      message: "Are you sure to clear all product in your cart?",
+      buttons: [
+        {
+          label: "Clear",
+          onClick: () => clearCarts(),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+
+  const addToCart = (carts) => {
+    dispatch(ADD_TO_CART(carts));
+  };
+
+  const decreaseCart = (carts) => {
+    dispatch(DECREASE_CART(carts));
+  };
+
+  const removeCart = (carts) => {
+    dispatch(REMOVE_FROM_CART(carts));
+  };
+
+  const clearCarts = () => {
+    dispatch(CLEAR_CART());
+    navigate("/shop");
+  };
+
   return (
-    <div>
-      <h3>Cartalogue here</h3>
-    </div>
+    <section>
+      <div className={`container ${styles.table}`}>
+        <h2>Shopping Cartalogue</h2>
+        {cartItems.length === 0 ? (
+          <>
+            <p>You cart is empty</p>
+            <Link to={"/shop"}> &larr; Continue Shopping</Link>
+          </>
+        ) : (
+          <>
+            <table>
+              <thead>
+                <tr>
+                  <th>S/n</th>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItems?.map((carts, index) => {
+                  const { _id, name, price, image, cartQuantity } = carts;
+                  return (
+                    <tr key={_id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <p>
+                          <b>{name}</b>
+                        </p>
+                        <img
+                          src={image[0]}
+                          alt={name}
+                          style={{ width: "100px" }}
+                        />
+                      </td>
+                      <td>${price}</td>
+                      <td>
+                        {/* btns */}
+                        <div className={styles.count}>
+                          <>
+                            <button
+                              className="--btn"
+                              onClick={() => decreaseCart(carts)}
+                            >
+                              -
+                            </button>
+                            <p>
+                              <b>{cartQuantity}</b>
+                            </p>
+                            <button
+                              className="--btn"
+                              onClick={() => addToCart(carts)}
+                            >
+                              +
+                            </button>
+                          </>
+                        </div>
+                      </td>
+                      <td>${price * cartQuantity}</td>
+                      <td className={styles.icons}>
+                        <FaTrashAlt
+                          size={20}
+                          color="red"
+                          onClick={() => confirmDelete(carts)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className={styles.summary}>
+              <button
+                className="--btn --btn-danger"
+                onClick={() => confirmToClear()}
+              >
+                Clear Cart{" "}
+              </button>
+              <div className={styles.checkout}>
+                <div>
+                  <Link to={"/shop"}>&larr; Continue Shopping</Link>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 
