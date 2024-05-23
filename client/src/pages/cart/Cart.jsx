@@ -19,11 +19,14 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { FaTrashAlt } from "react-icons/fa";
 import Card from "../../components/card/Card";
+import VerifyCoupon from "../../components/verifyCoupon/VerifyCoupon";
 
 const Cart = () => {
   const cartItems = useSelector(selectCartItems);
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
   const cartTotalAmount = useSelector(selectCartTotalAmount);
+
+  const { coupon } = useSelector((state) => state.coupon);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -91,8 +94,8 @@ const Cart = () => {
 
   useEffect(() => {
     dispatch(CALCULATE_TOTAL_QUANTITY());
-    dispatch(CALCULATE_SUBTOTAL());
-  }, [dispatch, cartItems]);
+    dispatch(CALCULATE_SUBTOTAL({ coupon }));
+  }, [dispatch, cartItems, coupon]);
 
   return (
     <section>
@@ -188,6 +191,7 @@ const Cart = () => {
                     <h4>Subtotal:</h4>
                     <h3>{`$${cartTotalAmount?.toFixed(2)}`}</h3>
                   </div>
+                  <VerifyCoupon />
                 </Card>
               </div>
             </div>

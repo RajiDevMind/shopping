@@ -96,12 +96,8 @@ const couponSlice = createSlice({
   name: "coupon",
   initialState,
   reducers: {
-    // this line func, not necessary. Not in use!
     RESET_COUPON(state) {
-      state.isError = false;
-      state.isSuccess = false;
-      state.isLoading = false;
-      state.msg = "";
+      state.coupon = null;
     },
   },
   extraReducers: (builder) => {

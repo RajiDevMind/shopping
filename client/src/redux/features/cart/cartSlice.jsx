@@ -3,13 +3,20 @@ import { toast } from "react-toastify";
 import { getCartQuantityById } from "../../../utils";
 import cartService from "./cartService";
 
+// Apply discount to cart
+const applyDiscount = (cartTotalAmount, discountPercentage) => {
+  let discountAmount = (discountPercentage / 100) * cartTotalAmount;
+  let updatedTotal = cartTotalAmount - discountAmount;
+  return updatedTotal;
+};
+
 const initialState = {
   cartItems: localStorage.getItem("cartItems")
     ? JSON.parse(localStorage.getItem("cartItems"))
     : [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
-  fixedCartTotalAmount: 0,
+  initialCartTotalAmount: 0,
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -153,7 +160,19 @@ const cart = createSlice({
       const totalAmount = array.reduce((a, b) => {
         return a + b;
       }, 0);
-      state.cartTotalAmount = totalAmount;
+      // state.cartTotalAmount = totalAmount;
+      // Applying discount on coupons
+      state.initialCartTotalAmount = totalAmount;
+
+      if (action.payload && action.payload.coupon !== null) {
+        const discountPrice = applyDiscount(
+          totalAmount,
+          action.payload.coupon.discount
+        );
+        state.cartTotalAmount = discountPrice;
+      } else {
+        state.cartTotalAmount = totalAmount;
+      }
     },
   },
   extraReducers: (builder) => {
