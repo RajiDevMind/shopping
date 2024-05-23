@@ -18,6 +18,7 @@ import NotFound from "./pages/notfound/NotFound";
 import Product from "./pages/shop/Product";
 import ProductDetails from "./components/product/productDetails/ProductDetails";
 import Cart from "./pages/cart/Cart";
+import CheckoutDetails from "./pages/checkout/CheckoutDetails";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = "http://localhost:2000";
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/shop" element={<Product />} />
             <Route path="/product-details/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout-details" element={<CheckoutDetails />} />
 
             <Route
               path="/admin/*"
