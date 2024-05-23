@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./Slider.scss";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { sliderData } from "./slider-data";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Slider = () => {
-  const navigate = useNavigate();
-
   // state var to track displayed slide
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideLength = sliderData.length;
@@ -52,21 +50,18 @@ const Slider = () => {
             {index === currentSlide && (
               <>
                 <img src={image} alt={desc} />
-                <div className="content">
-                  <span className="span1"></span>
-                  <span className="span2"></span>
-                  <span className="span3"></span>
-                  <span className="span4"></span>
-                  <h2>{heading}</h2>
-                  <p>{desc}</p>
-                  <hr />
-                  <button
-                    className="--btn --btn-primary"
-                    onClick={() => navigate("/shop")}
-                  >
-                    Shop Now
-                  </button>
-                </div>
+                <Link to={"/shop"}>
+                  <div className="content">
+                    <span className="span1"></span>
+                    <span className="span2"></span>
+                    <span className="span3"></span>
+                    <span className="span4"></span>
+                    <h2>{heading}</h2>
+                    <p>{desc}</p>
+                    <hr />
+                    <button className="--btn --btn-primary">Shop Now</button>
+                  </div>
+                </Link>
               </>
             )}
           </div>
