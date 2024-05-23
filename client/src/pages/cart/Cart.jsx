@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./Cart.module.scss";
-import "./Radio.scss";
+// import "./Radio.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,6 +20,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { FaTrashAlt } from "react-icons/fa";
 import Card from "../../components/card/Card";
 import VerifyCoupon from "../../components/verifyCoupon/VerifyCoupon";
+import PaymentOptions from "../../components/paymentOptions/PaymentOptions";
 
 const Cart = () => {
   const cartItems = useSelector(selectCartItems);
@@ -192,6 +193,8 @@ const Cart = () => {
                     <h3>{`$${cartTotalAmount?.toFixed(2)}`}</h3>
                   </div>
                   <VerifyCoupon />
+                  <div className="--underline --my"></div>
+                  <PaymentOptions />
                 </Card>
               </div>
             </div>
