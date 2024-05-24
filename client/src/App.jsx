@@ -25,7 +25,7 @@ import Order from "./components/order/Order";
 import Orderdetails from "./components/order/Orderdetails";
 
 // asset to make API calls with axios
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = import.meta.env.VITE_APP_BACKEND_URL;
 axios.defaults.withCredentials = true;
 
 const App = () => {
