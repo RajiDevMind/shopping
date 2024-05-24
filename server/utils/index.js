@@ -7,13 +7,13 @@ const calculateTotalAmount = (products, cartItems) => {
     });
 
     if (product) {
-      const quantity = cartItems.quantity;
+      const quantity = cartItem.cartQuantity;
       const price = parseFloat(product.price);
       totalPrice += quantity * price;
     }
   });
 
-  return totalPrice;
+  return totalPrice * 100;
 };
 
 module.exports = { calculateTotalAmount };

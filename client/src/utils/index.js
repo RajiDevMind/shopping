@@ -40,3 +40,13 @@ export const getCartQuantityById = (products, id) => {
   }
   return 0; // if _id not found return default value. 0
 };
+
+// Extract id and cart quantity from cartItems
+export const extractIdAndCartQuantity = (cartItem) => {
+  return cartItem.map((item, index) => {
+    return {
+      _id: item._id,
+      cartQuantity: item.cartQuantity,
+    };
+  });
+};

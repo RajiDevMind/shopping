@@ -1,3 +1,4 @@
+require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
@@ -107,21 +108,24 @@ const stripePayment = asyncHandler(async (req, res) => {
 
   // Create a PaymentIntent with the order amount, currency , automatic_payment_methods and orderDetails
   const paymentIntent = await Stripe.paymentIntents.create({
-    amount: orderAmount,
+    amount: parseInt(orderAmount),
     currency: "usd",
     automatic_payment_methods: {
       enabled: true,
     },
     description,
     shipping: {
-      line1: shipping.line1,
-      line2: shipping.line2,
-      city: shipping.city,
-      country: shipping.country,
-      postal_code: shipping.postal_code,
+      address: {
+        line1: shipping.line1,
+        line2: shipping.line2,
+        city: shipping.city,
+        country: shipping.country,
+        postal_code: shipping.postal_code,
+      },
+      name: shipping.name,
+      phone: shipping.phone,
     },
-    name: shipping.name,
-    phone: shipping.phone,
+    // receipt_email: customerEmail
   });
 
   res.send({
