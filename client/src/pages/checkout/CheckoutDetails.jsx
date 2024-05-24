@@ -12,6 +12,7 @@ import {
 } from "../../redux/features/checkout/checkoutSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CheckoutSummary from "../../components/checkout/checkoutSummary/CheckoutSummary";
 
 const initialAddressState = {
   name: "",
@@ -241,6 +242,12 @@ const CheckoutDetails = () => {
               <button className="--btn --btn-primary" type="submit">
                 Proceed to Checkout
               </button>
+            </Card>
+          </div>
+          {/* Checkout Summary */}
+          <div>
+            <Card cardClass={styles.card}>
+              <CheckoutSummary />
             </Card>
           </div>
         </form>

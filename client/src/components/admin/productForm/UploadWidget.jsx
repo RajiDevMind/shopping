@@ -4,7 +4,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { toast } from "react-toastify";
 
-const uploadPreset = "dqmuli5h";
+const uploadPreset = import.meta.env.APP_UPLOAD_PRESET;
 const url = `https://api.cloudinary.com/v1_1/rajidevmind/image/upload`;
 
 const UploadWidget = ({ files, setFiles }) => {

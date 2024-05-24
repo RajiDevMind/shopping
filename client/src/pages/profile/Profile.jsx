@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 import Loader from "../../components/loader/Loader";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
-const cloudName = "rajidevmind";
-const uploadPreset = "dqmuli5h";
+const cloudName = import.meta.env.APP_CLOUD_NAME;
+const uploadPreset = import.meta.env.APP_UPLOAD_PRESET;
 
 const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
