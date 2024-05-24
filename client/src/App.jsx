@@ -20,9 +20,12 @@ import ProductDetails from "./components/product/productDetails/ProductDetails";
 import Cart from "./pages/cart/Cart";
 import CheckoutDetails from "./pages/checkout/CheckoutDetails";
 import Checkout from "./pages/checkout/Checkout";
+import CheckoutSuccess from "./pages/checkout/CheckoutSuccess";
+import Order from "./components/order/Order";
+import Orderdetails from "./components/order/Orderdetails";
 
 // asset to make API calls with axios
-axios.defaults.baseURL = "http://localhost:2000";
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -53,8 +56,13 @@ const App = () => {
             <Route path="/shop" element={<Product />} />
             <Route path="/product-details/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
+
+            <Route path="/order-history" element={<Order />} />
+            <Route path="/checkout-details/:id" element={<Orderdetails />} />
+
             <Route path="/checkout-details" element={<CheckoutDetails />} />
             <Route path="/checkout-stripe" element={<Checkout />} />
+            <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
             <Route
               path="/admin/*"
