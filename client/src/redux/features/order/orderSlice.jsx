@@ -1,13 +1,65 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import orderService from "./OrderService";
+import { toast } from "react-toastify";
 
-const initialState = {};
+const initialState = {
+  order: null,
+  orders: [],
+  totalOrderAmount: 0,
+  isError: false,
+  isLoading: false,
+  isSuccess: false,
+  msg: "",
+};
+
+export const createOrder = createAsyncThunk(
+  "orders/createOrder",
+  async (orderData, thunkAPI) => {
+    try {
+      const responseData = await orderService.createOrder(orderData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
 
 const orderSlice = createSlice({
-  name: second,
+  name: "order",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // create order
+      .addCase(createOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload);
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      });
+  },
 });
 
 export const {} = orderSlice.actions;
+
+export const selectOrder = (state) => state.order.orders;
+export const selectTotalOrderAmount = (state) => state.order.totalOrderAmount;
 
 export default orderSlice.reducer;
