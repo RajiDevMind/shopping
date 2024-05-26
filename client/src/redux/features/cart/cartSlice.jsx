@@ -64,7 +64,7 @@ export const getCartDB = createAsyncThunk(
 );
 
 const cart = createSlice({
-  name: "cartalogue",
+  name: "cart",
   initialState,
   reducers: {
     ADD_TO_CART(state, action) {
@@ -201,9 +201,9 @@ const cart = createSlice({
         state.isError = false;
         localStorage.setItem("cartItems", JSON.stringify(action.payload));
         if (action.payload.length > 0) {
-          window.location.href = import.meta.env.VITE_CLIENT_URL + "/cart";
+          window.location.href = import.meta.env.VITE_APP_CLIENT_URL + "/cart";
         } else {
-          window.location.href = import.meta.env.VITE_CLIENT_URL;
+          window.location.href = import.meta.env.VITE_APP_CLIENT_URL;
         }
 
         console.log(action.payload);

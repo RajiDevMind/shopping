@@ -9,6 +9,17 @@ import { toast } from "react-toastify";
 import Card from "../../card/Card";
 import CheckoutSummary from "../checkoutSummary/CheckoutSummary";
 import { Spinner } from "../../loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectCartItems,
+  selectCartTotalAmount,
+} from "../../../redux/features/cart/cartSlice";
+import {
+  selectPaymentMethod,
+  selectShippingAddress,
+} from "../../../redux/features/checkout/checkoutSlice";
+import { useNavigate } from "react-router-dom";
+import { createOrder } from "../../../redux/features/order/orderSlice";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -17,8 +28,29 @@ export default function CheckoutForm() {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const cartTotalAmount = useSelector(selectCartTotalAmount);
+  const cartItems = useSelector(selectCartItems);
+  const shippingAddress = useSelector(selectShippingAddress);
+  const paymentMethod = useSelector(selectPaymentMethod);
+  const { coupon } = useSelector((state) => state.coupon);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const saveOrderDB = () => {
-    console.log("Order Saved");
+    const today = new Date();
+    const formData = {
+      orderDate: today.toDateString(),
+      orderTime: today.toLocaleTimeString(),
+      orderAmount: cartTotalAmount,
+      orderStatus: "Order placed...",
+      cartItems,
+      shippingAddress,
+      paymentMethod,
+      coupon: coupon !== null ? coupon : { name: "nil" },
+    };
+    dispatch(createOrder(formData));
+    navigate("/checkout-success");
   };
 
   useEffect(() => {
