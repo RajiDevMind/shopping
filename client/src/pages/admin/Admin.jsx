@@ -10,7 +10,7 @@ import ViewProduct from "../../components/admin/viewProducts/ViewProduct";
 import EditProduct from "../../components/admin/editProduct/EditProduct";
 import Coupon from "../../components/admin/coupon/Coupon";
 import Orders from "../../components/admin/orders/Orders";
-import OrderDetails from "../../components/admin/orders/OrderDetails";
+import OrderDetailed from "../../components/admin/orders/OrderDetailed";
 
 const Admin = () => {
   return (
@@ -31,7 +31,7 @@ const Admin = () => {
           <Route path="coupon" element={<Coupon />} />
 
           <Route path="orders" element={<Orders />} />
-          <Route path="order-details/:id" element={<OrderDetails />} />
+          <Route path="order-details/:id" element={<OrderDetailed />} />
         </Routes>
       </div>
     </div>
