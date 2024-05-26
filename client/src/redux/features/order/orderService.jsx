@@ -9,8 +9,15 @@ const createOrder = async (orderData) => {
   return resp.data.msg;
 };
 
+// Get All orders
+const getAllOrders = async () => {
+  const resp = await axios.get(API_URL);
+  return resp.data;
+};
+
 const orderService = {
   createOrder,
+  getAllOrders,
 };
 
 export default orderService;

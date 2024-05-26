@@ -32,6 +32,26 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+export const getAllOrders = createAsyncThunk(
+  "orders/getAllOrders",
+  async (_, thunkAPI) => {
+    try {
+      const responseData = await orderService.getAllOrders();
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -49,6 +69,23 @@ const orderSlice = createSlice({
         toast.success(action.payload);
       })
       .addCase(createOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // create order
+      .addCase(getAllOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.orders = action.payload;
+        console.log(action.payload);
+      })
+      .addCase(getAllOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;

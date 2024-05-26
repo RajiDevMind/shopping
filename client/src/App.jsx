@@ -21,7 +21,7 @@ import Cart from "./pages/cart/Cart";
 import CheckoutDetails from "./pages/checkout/CheckoutDetails";
 import Checkout from "./pages/checkout/Checkout";
 import CheckoutSuccess from "./pages/checkout/CheckoutSuccess";
-import Order from "./components/order/Order";
+import OrderHistory from "./components/order/OrderHistory";
 import Orderdetails from "./components/order/Orderdetails";
 
 // asset to make API calls with axios
@@ -57,7 +57,7 @@ const App = () => {
             <Route path="/product-details/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
 
-            <Route path="/order-history" element={<Order />} />
+            <Route path="/order-history" element={<OrderHistory />} />
             <Route path="/checkout-details/:id" element={<Orderdetails />} />
 
             <Route path="/checkout-details" element={<CheckoutDetails />} />
