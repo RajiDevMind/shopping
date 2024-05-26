@@ -67,7 +67,7 @@ const getSingleOrder = asyncHandler(async (req, res) => {
   // match order to user
   if (order.user.toString() !== req.user._id.toString()) {
     res.status(401);
-    throw new Error("User not authorised!");
+    throw new Error("User not authorised to view order!");
   }
   res.status(200).json(order);
 });

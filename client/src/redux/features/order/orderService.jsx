@@ -15,9 +15,15 @@ const getAllOrders = async () => {
   return resp.data;
 };
 
+const getSingleOrder = async (id) => {
+  const resp = await axios.get(API_URL + id);
+  return resp.data;
+};
+
 const orderService = {
   createOrder,
   getAllOrders,
+  getSingleOrder,
 };
 
 export default orderService;
