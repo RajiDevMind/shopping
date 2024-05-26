@@ -20,10 +20,17 @@ const getSingleOrder = async (id) => {
   return resp.data;
 };
 
+// Update order status: processing, pending or delivered
+const updateOrderStatus = async (id, orderData) => {
+  const resp = await axios.patch(`${API_URL}${id}`, orderData);
+  return resp.data.msg;
+};
+
 const orderService = {
   createOrder,
   getAllOrders,
   getSingleOrder,
+  updateOrderStatus,
 };
 
 export default orderService;

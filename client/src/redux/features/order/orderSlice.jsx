@@ -72,6 +72,27 @@ export const getSingleOrder = createAsyncThunk(
   }
 );
 
+// Update order status: to processing, pending or delivered
+export const updateOrderStatus = createAsyncThunk(
+  "orders/updateOrderStatus",
+  async ({ id, orderData }, thunkAPI) => {
+    try {
+      const responseData = await orderService.updateOrderStatus(id, orderData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -121,6 +142,22 @@ const orderSlice = createSlice({
         state.order = action.payload;
       })
       .addCase(getSingleOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // updateOrderStatus
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload);
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;
