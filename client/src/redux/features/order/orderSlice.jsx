@@ -103,7 +103,6 @@ const orderSlice = createSlice({
         state.isSuccess = true;
         state.isError = false;
         state.orders = action.payload;
-        console.log(action.payload);
       })
       .addCase(getAllOrders.rejected, (state, action) => {
         state.isLoading = false;
@@ -119,8 +118,7 @@ const orderSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.order = action?.payload;
-        // console.log(action?.payload);
+        state.order = action.payload;
       })
       .addCase(getSingleOrder.rejected, (state, action) => {
         state.isLoading = false;
