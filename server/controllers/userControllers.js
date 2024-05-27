@@ -6,7 +6,7 @@ const User = require("../models/userModel");
 const sendEmail = require("../utils/sendEmail");
 const {
   successfulRegistration,
-} = require("./emailTemplates/registerUserEmail");
+} = require("../emailTemplates/registerUserEmail");
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });

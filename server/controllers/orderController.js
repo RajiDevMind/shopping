@@ -4,7 +4,7 @@ const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const { calculateTotalAmount } = require("../utils");
 const sendEmail = require("../utils/sendEmail");
-const { orderSuccessEmail } = require("./emailTemplates/orderTemplate");
+const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
 const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createOrder = asyncHandler(async (req, res) => {
