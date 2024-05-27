@@ -2,10 +2,11 @@ require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
-const { calculateTotalAmount } = require("../utils");
+const { calculateTotalAmount, updateProductQuantity } = require("../utils");
 const sendEmail = require("../utils/sendEmail");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
 const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const axios = require("axios");
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
@@ -36,6 +37,9 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     coupon,
   });
+
+  // Update Product Quantity for stock mgt
+  await updateProductQuantity(cartItems);
 
   // Send email to the user
   const subject = "Order created -Sellout App";
@@ -143,10 +147,44 @@ const stripePayment = asyncHandler(async (req, res) => {
   });
 });
 
+// Redirecting user to the server to Confirm Flutterwave Payment
+const verifyFlutterwavePayment = asyncHandler(async (req, res) => {
+  const { transaction_id } = req.query;
+
+  // confirm transaction
+  const url = `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`;
+
+  const response = await axios({
+    url,
+    method: "get",
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json",
+      Authorization: process.env.FLUTTERWAVE_SECRET_KEY,
+    },
+  });
+
+  const { tx_ref } = response.data.data;
+
+  const successURL =
+    process.env.CLIENT_URL +
+    `/checkout-flutterwave?payment=successful&ref=${tx_ref}`;
+
+  const failedURL =
+    process.env.CLIENT_URL + `/checkout-flutterwave?payment=failed`;
+
+  if (req.query.status === "successful") {
+    return res.redirect(successURL);
+  } else {
+    res.redirect(failedURL);
+  }
+});
+
 module.exports = {
   createOrder,
   getAllOrders,
   getSingleOrder,
   updateOrderStatus,
   stripePayment,
+  verifyFlutterwavePayment,
 };

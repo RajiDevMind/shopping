@@ -7,7 +7,10 @@ const {
   getSingleOrder,
   updateOrderStatus,
   stripePayment,
+  verifyFlutterwavePayment,
 } = require("../controllers/orderController");
+
+router.get("/response", verifyFlutterwavePayment);
 
 router.post("/", auth, createOrder);
 router.get("/", auth, getAllOrders).get("/:id", auth, getSingleOrder);

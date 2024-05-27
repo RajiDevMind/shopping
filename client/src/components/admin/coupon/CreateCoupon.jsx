@@ -9,7 +9,6 @@ import Card from "../../card/Card";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "../../loader/Loader";
-import { futureDate } from "../../../utils";
 
 const CreateCoupon = ({ reloadCoupon }) => {
   const [coupName, setCoupName] = useState("");

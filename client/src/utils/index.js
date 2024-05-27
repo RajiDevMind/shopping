@@ -12,12 +12,6 @@ export const validateEmail = (email) => {
   return email.match(/^[\w-]+(\.[\w-]+)*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/);
 };
 
-export const futureDate = (addDate) => {
-  const currentDate = new Date();
-  currentDate.setHours(currentDate.getHours() + addDate);
-  return currentDate;
-};
-
 export const calculateAverageRatings = (ratings) => {
   if (!Array.isArray(ratings) || ratings.length === 0) {
     return 0;

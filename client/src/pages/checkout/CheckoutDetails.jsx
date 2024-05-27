@@ -74,7 +74,7 @@ const CheckoutDetails = () => {
       navigate("/checkout-stripe");
     }
     if (paymentMethod === "flutterwave") {
-      navigate("/checkout-flutter");
+      navigate("/checkout-flutterwave");
     }
     if (paymentMethod === "paypal") {
       navigate("/checkout-paypal");

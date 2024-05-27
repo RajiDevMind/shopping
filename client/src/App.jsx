@@ -23,6 +23,7 @@ import Checkout from "./pages/checkout/Checkout";
 import CheckoutSuccess from "./pages/checkout/CheckoutSuccess";
 import OrderHistory from "./components/order/OrderHistory";
 import Orderdetails from "./components/order/Orderdetails";
+import CheckoutWithFlutterwave from "./pages/checkout/CheckoutWithFlutterwave";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = import.meta.env.VITE_APP_BACKEND_URL;
@@ -62,6 +63,10 @@ const App = () => {
 
             <Route path="/checkout-details" element={<CheckoutDetails />} />
             <Route path="/checkout-stripe" element={<Checkout />} />
+            <Route
+              path="/checkout-flutterwave"
+              element={<CheckoutWithFlutterwave />}
+            />
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
             <Route
