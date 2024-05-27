@@ -3,6 +3,8 @@ const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const { calculateTotalAmount } = require("../utils");
+const sendEmail = require("../utils/sendEmail");
+const { orderSuccessEmail } = require("./emailTemplates/orderTemplate");
 const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const createOrder = asyncHandler(async (req, res) => {
@@ -34,6 +36,14 @@ const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     coupon,
   });
+
+  // Send email to the user
+  const subject = "Order created -Sellout App";
+  const send_to = req.user.email;
+  const template = orderSuccessEmail(req.user.name, cartItems);
+  const reply_To = "no_reply@gmail.com";
+
+  await sendEmail(subject, send_to, template, reply_To);
 
   return res.status(201).json({ msg: "Order created successfully!" });
 });

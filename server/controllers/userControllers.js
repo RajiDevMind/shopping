@@ -3,6 +3,10 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+const sendEmail = require("../utils/sendEmail");
+const {
+  successfulRegistration,
+} = require("./emailTemplates/registerUserEmail");
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
@@ -43,6 +47,15 @@ const registerUser = asyncHandler(async (req, res) => {
       // secure: true,
       // sameSite: "none",
     });
+
+    // Send email to the user
+    const subject = "Successfully Registered - Sellout";
+    const send_to = email;
+    const template = successfulRegistration(name);
+    const reply_To = "roi4tech@gmail.com";
+
+    await sendEmail(subject, send_to, template, reply_To);
+
     // sending users data to the frontend
     res.status(201).json({ _id, name, email, role, token });
   } else {
