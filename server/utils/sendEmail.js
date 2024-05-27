@@ -23,7 +23,7 @@ const sendEmail = async (subject, send_to, template, reply_to, cc) => {
     },
   });
   const emailTemplate = mailGenerator.generate(template);
-  require("fs").writeFileSync("preview.html", emailTemplate, "utf8"); // preview before sending
+  // require("fs").writeFileSync("preview.html", emailTemplate, "utf8"); // preview before sending
 
   // Options for sending email
   const options = {

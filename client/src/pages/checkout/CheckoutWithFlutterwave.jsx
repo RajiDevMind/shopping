@@ -22,6 +22,7 @@ import {
   selectPaymentMethod,
   selectShippingAddress,
 } from "../../redux/features/checkout/checkoutSlice";
+import { toast } from "react-toastify";
 
 const CheckoutWithFlutterwave = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,10 @@ const CheckoutWithFlutterwave = () => {
   const { coupon } = useSelector((state) => state.coupon);
 
   const [urlParams] = useSearchParams();
-  //   payment / ref
+  const payment = urlParams.get("payment");
+  const ref = urlParams.get("ref");
+
+  const tx_REF = import.meta.env.VITE_APP_TX_REF;
 
   const saveOrderDB = () => {
     const today = new Date();
@@ -53,21 +57,34 @@ const CheckoutWithFlutterwave = () => {
     // navigate("/checkout-success");
   };
 
+  useEffect(() => {
+    if (payment === "successful" && ref === tx_REF && cartTotalAmount > 0) {
+      toast.success("Payment successfully");
+      saveOrderDB();
+    }
+    if (payment === "failed") {
+      return toast.error("Payment Failed. Try again!");
+    }
+
+    setTimeout(() => {
+      if (payment === "successful" && ref === tx_REF) {
+        navigate("/checkout-success");
+      }
+    }, 5000);
+  }, [payment, ref, cartTotalAmount, navigate]);
+
+  // Function to make payment with flutterwave
   const makePayment = async (e) => {
     e.preventDefault();
     await FlutterwaveCheckout({
       public_key: import.meta.env.VITE_APP_FLUTTERWAVE_PUBLIC_KEY,
-      tx_ref: import.meta.env.VITE_APP_TX_REF,
+      tx_ref: tx_REF,
       amount: cartTotalAmount,
       currency: "USD",
       payment_options: "card, banktransfer, ussd",
       redirect_url: `${
         import.meta.env.VITE_APP_BACKEND_URL
       }/auth/order/response`,
-      //   meta: {
-      //     source: "docs-inline-test",
-      //     consumer_mac: "92a3-912ba-1192a",
-      //   },
       customer: {
         email: user.email,
         phone_number: user.phone,
