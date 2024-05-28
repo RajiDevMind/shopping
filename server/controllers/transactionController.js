@@ -41,4 +41,15 @@ const transferFund = asyncHandler(async (req, res) => {
   res.status(201).json({ msg: "Transaction Successful" });
 });
 
-module.exports = { transferFund };
+const verifyAccount = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.recipient });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User account not found");
+  }
+
+  res.status(201).json({ msg: "Account verification Successful" });
+});
+
+module.exports = { transferFund, verifyAccount };
