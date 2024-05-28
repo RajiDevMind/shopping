@@ -9,13 +9,13 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const transactionRoutes = require("./routes/transactionRoutes");
 const errorHandler = require("./middleware/errorMiddleware");
 const app = express();
 
 const port = process.env.PORT || 2000;
 
 // middleware
-app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
@@ -26,6 +26,9 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+
+app.use("/auth/transaction/", transactionRoutes);
+app.use(express.json());
 
 // error middleware
 app.use(errorHandler);

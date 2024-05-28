@@ -41,6 +41,10 @@ const userSchema = mongoose.Schema({
   cartItems: {
     type: [Object],
   },
+  balance: {
+    type: Number,
+    default: 0,
+  },
 });
 
 // Encrypt users password b4 sending to DB
