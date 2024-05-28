@@ -79,6 +79,9 @@ const CheckoutDetails = () => {
     if (paymentMethod === "paypal") {
       navigate("/checkout-paypal");
     }
+    if (paymentMethod === "paystack") {
+      navigate("/checkout-paystack");
+    }
     if (paymentMethod === "wallet") {
       navigate("/checkout-wallet");
     }

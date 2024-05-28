@@ -65,6 +65,17 @@ const PaymentOptions = () => {
           />
           <span className="custom-radio"></span> Paypal
         </label>
+        <label htmlFor="paystack" className="radio-label">
+          <input
+            type="radio"
+            name="paymentMethod"
+            id="paystack"
+            value={"paystack"}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className="radio-input"
+          />
+          <span className="custom-radio"></span> Paystack
+        </label>
         <label htmlFor="wallet" className="radio-label">
           <input
             type="radio"

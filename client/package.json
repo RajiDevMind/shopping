@@ -44,6 +44,7 @@
     "react-icons": "^4.7.1",
     "react-multi-carousel": "^2.8.4",
     "react-paginate": "^8.1.4",
+    "react-paystack": "^5.0.0",
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
