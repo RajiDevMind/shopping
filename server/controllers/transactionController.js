@@ -1,6 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transactionModel");
 const User = require("../models/userModel");
+const sendEmail = require("../utils/sendEmail");
+const {
+  successfulTransfer,
+} = require("../emailTemplates/transferFundTemplate");
 
 const transferFund = asyncHandler(async (req, res) => {
   const { amount, sender, recipient, description, status } = req.body;
@@ -37,6 +41,14 @@ const transferFund = asyncHandler(async (req, res) => {
 
   // Create and save transaction
   await Transaction.create({ amount, sender, recipient, description, status });
+
+  // Send email to the user
+  const subject = "Successful Transaction!!!";
+  const send_to = sender;
+  const template = successfulTransfer(sender, recipient, amount);
+  const reply_To = "no_reply@gmail.com";
+
+  await sendEmail(subject, send_to, template, reply_To);
 
   res.status(201).json({ msg: "Transaction Successful" });
 });
