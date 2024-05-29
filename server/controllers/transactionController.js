@@ -6,6 +6,7 @@ const {
   successfulTransfer,
 } = require("../emailTemplates/transferFundTemplate");
 const { depositFund } = require("../utils");
+const axios = require("axios");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const transferFund = asyncHandler(async (req, res) => {
@@ -155,10 +156,47 @@ const webhook = asyncHandler(async (req, res) => {
   res.send().end();
 });
 
+const depositFundFLW = asyncHandler(async (req, res) => {
+  const { transaction_id } = req.query;
+
+  // confirm transaction
+  const url = `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`;
+
+  const response = await axios({
+    url,
+    method: "get",
+    headers: {
+      "content-type": "application/json",
+      Accept: "application/json",
+      Authorization: process.env.FLUTTERWAVE_SECRET_KEY,
+    },
+  });
+
+  const { tx_ref, amount, customer } = response.data.data;
+
+  const successURL = process.env.CLIENT_URL + `/wallet?payment=successful`;
+
+  const failedURL = process.env.CLIENT_URL + `/wallet?payment=failed`;
+
+  if (req.query.status === "successful") {
+    // Deposit funds into customer wallet
+    const data = {
+      amount_subtotal: amount,
+    };
+    const description = "Flutterwave deposit";
+    const source = "flutterwave";
+    depositFund(customer, data, description, source);
+    return res.redirect(successURL);
+  } else {
+    res.redirect(failedURL);
+  }
+});
+
 module.exports = {
   transferFund,
   verifyAccount,
   getUserTransactions,
   depositFundStripe,
   webhook,
+  depositFundFLW,
 };

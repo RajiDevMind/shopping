@@ -45,7 +45,7 @@ const depositFund = async (customer, data, description, source) => {
       source === "stripe" ? data.amount_subtotal / 100 : data.amount_subtotal,
     sender: "self",
     recipient: customer.email,
-    description: source === "stripe" ? "Stripe deposit" : "Flutterwave deposit",
+    description: description,
     status: "success",
   });
 
