@@ -52,4 +52,19 @@ const verifyAccount = asyncHandler(async (req, res) => {
   res.status(201).json({ msg: "Account verification Successful" });
 });
 
-module.exports = { transferFund, verifyAccount };
+const getUserTransactions = asyncHandler(async (req, res) => {
+  if (req.user.email !== req.body.email) {
+    res.status(400);
+    throw new Error("Not Authorised to view this transaction");
+  }
+  const transactions = await Transaction.find({
+    $or: [{ sender: req.body.email }, { recipient: req.body.email }],
+  })
+    .sort({ createdAt: -1 })
+    .populate("sender")
+    .populate("recipient");
+
+  res.status(200).json(transactions);
+});
+
+module.exports = { transferFund, verifyAccount, getUserTransactions };
