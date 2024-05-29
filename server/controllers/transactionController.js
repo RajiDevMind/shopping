@@ -5,6 +5,8 @@ const sendEmail = require("../utils/sendEmail");
 const {
   successfulTransfer,
 } = require("../emailTemplates/transferFundTemplate");
+const { depositFund } = require("../utils");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const transferFund = asyncHandler(async (req, res) => {
   const { amount, sender, recipient, description, status } = req.body;
@@ -79,4 +81,84 @@ const getUserTransactions = asyncHandler(async (req, res) => {
   res.status(200).json(transactions);
 });
 
-module.exports = { transferFund, verifyAccount, getUserTransactions };
+const depositFundStripe = asyncHandler(async (req, res) => {
+  const { amount } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  // Create Stripe Customer with userModel (stripeCustomerId)
+  if (!user.stripeCustomerId) {
+    const customer = await stripe.customers.create({ email: user.email });
+    user.stripeCustomerId = customer;
+  }
+  user.save();
+
+  // Creat Stripe Session
+  const session = await stripe.checkout.session.create({
+    mode: "payment",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "sellout wallet deposit...",
+            description: `Make a deposit of $${amount}to your Sellout wallet...`,
+          },
+          unit_amount: amount * 100,
+        },
+        quantity: 1,
+      },
+    ],
+    customer: user.stripeCustomerId,
+
+    success_url: `${process.env.CLIENT_URL}/wallet?payment=successful&amount=${amount}`,
+
+    cancel_url: `${process.env.CLIENT_URL}/wallet?payment=failed`,
+  });
+  return res.json(session);
+});
+
+const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
+
+const webhook = asyncHandler(async (req, res) => {
+  const sig = request.headers["stripe-signature"];
+
+  let data;
+  let event;
+  let eventType;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    console.log("Webhook Verified!");
+  } catch (err) {
+    console.log("Webhook Verification Error!", err);
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  data = event.data.object;
+  eventType = event.type;
+
+  if (eventType === "checkout.session.completed") {
+    stripe.customers
+      .retrieve(data.customer)
+      .then(async (customer) => {
+        // Deposit funds into customer account
+        const description = "Stripe deposit";
+        const source = "stripe";
+        depositFund(customer, data, description, source);
+      })
+      .catch((err) => console.log(err.message));
+  }
+  res.send().end();
+});
+
+module.exports = {
+  transferFund,
+  verifyAccount,
+  getUserTransactions,
+  depositFundStripe,
+  webhook,
+};

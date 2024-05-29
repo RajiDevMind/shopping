@@ -45,6 +45,9 @@ const userSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  stripeCustomerId: {
+    type: String,
+  },
 });
 
 // Encrypt users password b4 sending to DB

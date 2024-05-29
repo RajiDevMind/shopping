@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const Transaction = require("../models/transactionModel");
 
 const calculateTotalAmount = (products, cartItems) => {
   let totalPrice = 0;
@@ -37,4 +38,29 @@ const updateProductQuantity = async (cartItems) => {
   await Product.bulkWrite(bulkOption, {});
 };
 
-module.exports = { calculateTotalAmount, updateProductQuantity };
+// Deposit fund function | to Stripe | to Flutterwave
+const depositFund = async (customer, data, description, source) => {
+  await Transaction.create({
+    amount:
+      source === "stripe" ? data.amount_subtotal / 100 : data.amount_subtotal,
+    sender: "self",
+    recipient: customer.email,
+    description: source === "stripe" ? "Stripe deposit" : "Flutterwave deposit",
+    status: "success",
+  });
+
+  // Increase reciever account balance
+  await User.findOneAndUpdate(
+    { email: customer.email },
+    {
+      $inc: {
+        balance:
+          source === "stripe"
+            ? data.amount_subtotal / 100
+            : data.amount_subtotal,
+      },
+    }
+  );
+};
+
+module.exports = { calculateTotalAmount, updateProductQuantity, depositFund };
