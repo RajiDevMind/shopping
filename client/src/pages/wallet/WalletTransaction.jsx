@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 
 const WalletTransaction = ({ transactions, user }) => {
   // Pagination Start Here
-  const itemsPerPage = 1;
+  const itemsPerPage = 10;
   const [itemOffset, setItemOffset] = useState(0);
 
   const endOffset = itemOffset + itemsPerPage;

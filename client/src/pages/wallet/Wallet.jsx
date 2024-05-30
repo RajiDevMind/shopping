@@ -13,8 +13,12 @@ import {
 } from "react-icons/ai";
 import { FaRegPaperPlane } from "react-icons/fa";
 import WalletTransaction from "./WalletTransaction";
+import {
+  getUserTransactions,
+  selectTransaction,
+} from "../../redux/features/transaction/transactionSlice";
 
-const transactions = [
+const transactionss = [
   {
     _id: 3456789,
     createdAt: "30-12-2023",
@@ -37,13 +41,15 @@ const transactions = [
 
 const Wallet = () => {
   const user = useSelector(selectUser);
+  const transactions = useSelector(selectTransaction);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
-  }, [dispatch, user]);
+    dispatch(getUserTransactions());
+  }, [dispatch]);
 
   return (
     <section>

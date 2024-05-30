@@ -68,12 +68,8 @@ const verifyAccount = asyncHandler(async (req, res) => {
 });
 
 const getUserTransactions = asyncHandler(async (req, res) => {
-  if (req.user.email !== req.body.email) {
-    res.status(400);
-    throw new Error("Not Authorised to view this transaction");
-  }
   const transactions = await Transaction.find({
-    $or: [{ sender: req.body.email }, { recipient: req.body.email }],
+    $or: [{ sender: req.user.email }, { recipient: req.user.email }],
   })
     .sort({ createdAt: -1 })
     .populate("sender")
