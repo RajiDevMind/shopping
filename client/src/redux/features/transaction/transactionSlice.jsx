@@ -53,10 +53,28 @@ const transactionSlice = createSlice({
         state.isError = true;
         state.msg = action.payload;
         toast.error(action.payload);
+      })
+      // Transfer Funds
+      .addCase(transferFund.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(transferFund.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.msg = action.payload;
+        toast.success(action.payload);
+      })
+      .addCase(transferFund.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
       });
   },
 });
 
+// Get a user transactions
 export const getUserTransactions = createAsyncThunk(
   "transactions/getUserTransactions",
   async (_, thunkAPI) => {
@@ -98,8 +116,29 @@ export const verifyAccount = createAsyncThunk(
   }
 );
 
+export const transferFund = createAsyncThunk(
+  "transactions/transferFund",
+  async (funds, thunkAPI) => {
+    try {
+      const responseData = await transactionService.transferFund(funds);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 export const { RESET_TRANSACTION_MSG } = transactionSlice.actions;
 
 export const selectTransaction = (state) => state.transaction.transactions;
+export const selectTransactionMSG = (state) => state.transaction.msg;
 
 export default transactionSlice.reducer;

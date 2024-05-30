@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Wallet.scss";
 import PageMenu from "../../components/pageMenu/PageMenu";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,9 +14,15 @@ import {
 import { FaRegPaperPlane } from "react-icons/fa";
 import WalletTransaction from "./WalletTransaction";
 import {
+  RESET_TRANSACTION_MSG,
   getUserTransactions,
   selectTransaction,
+  selectTransactionMSG,
+  verifyAccount,
 } from "../../redux/features/transaction/transactionSlice";
+import TransferModal from "./TransferModal";
+import { toast } from "react-toastify";
+import { validateEmail } from "../../utils";
 
 const transactionss = [
   {
@@ -39,17 +45,78 @@ const transactionss = [
   },
 ];
 
+const initialState = {
+  amount: 0,
+  sender: "",
+  recipient: "",
+  description: "",
+  status: "",
+};
+
 const Wallet = () => {
-  const user = useSelector(selectUser);
-  const transactions = useSelector(selectTransaction);
+  const [transferData, setTransferData] = useState(initialState);
+
+  const { amount, sender, recipient, description, status } = transferData;
+
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [isVerified, setIsVerified] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { isLoading } = useSelector((state) => state.transaction);
+
+  const user = useSelector(selectUser);
+  const transactions = useSelector(selectTransaction);
+  const transactionMSG = useSelector(selectTransactionMSG);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setTransferData({ ...transferData, [name]: value });
+  };
+
+  const handleAcctChange = (e) => {
+    const { name, value } = e.target;
+    setTransferData({ ...transferData, [name]: value });
+    setIsVerified(false);
+    dispatch(RESET_TRANSACTION_MSG());
+  };
+
+  const verifyRecipientAcct = async (e) => {
+    e.preventDefault();
+    // validate email address
+    if (!validateEmail(recipient)) {
+      toast.error("Invalid email address!");
+    }
+    const formData = {
+      recipient,
+    };
+    dispatch(verifyAccount(formData));
+  };
+
+  const transferMoney = async (e) => {
+    console.log("TransferMoney");
+  };
+
+  const closeModal = async (e) => {
+    if (e.target.classList.contains("cm")) {
+      setShowTransferModal(false);
+      setTransferData({ ...initialState });
+      setIsVerified(false);
+    }
+  };
 
   useEffect(() => {
     dispatch(getUser());
     dispatch(getUserTransactions());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (transactionMSG === "Account verification Successful") {
+      setIsVerified(true);
+    }
+    dispatch(RESET_TRANSACTION_MSG());
+  }, [dispatch, transactionMSG]);
 
   return (
     <section>
@@ -70,7 +137,10 @@ const Wallet = () => {
                 <button className="--btn --btn-primary">
                   <AiOutlineDollarCircle /> &nbsp; Deposit Money
                 </button>
-                <button className="--btn --btn-danger">
+                <button
+                  className="--btn --btn-danger"
+                  onClick={() => setShowTransferModal(true)}
+                >
                   <FaRegPaperPlane /> &nbsp; Transfer
                 </button>
               </div>
@@ -102,6 +172,18 @@ const Wallet = () => {
             <WalletTransaction transactions={transactions} user={user} />
           )}
         </div>
+        {showTransferModal && (
+          <TransferModal
+            transferData={transferData}
+            isVerified={isVerified}
+            isLoading={isLoading}
+            handleInputChange={handleInputChange}
+            handleAcctChange={handleAcctChange}
+            transferMoney={transferMoney}
+            verifyRecipientAcct={verifyRecipientAcct}
+            closeModal={closeModal}
+          />
+        )}
       </div>
     </section>
   );

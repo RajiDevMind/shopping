@@ -15,9 +15,15 @@ const verifyAccount = async (acctData) => {
   return resp.data.msg;
 };
 
+const transferFund = async (funds) => {
+  const resp = await axios.post(API_URL + "transferFund", funds);
+  return resp.data.msg;
+};
+
 const transactionService = {
   getUserTransactions,
   verifyAccount,
+  transferFund,
 };
 
 export default transactionService;
