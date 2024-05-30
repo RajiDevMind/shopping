@@ -12,6 +12,28 @@ import {
   AiOutlineDollarCircle,
 } from "react-icons/ai";
 import { FaRegPaperPlane } from "react-icons/fa";
+import WalletTransaction from "./WalletTransaction";
+
+const transactions = [
+  {
+    _id: 3456789,
+    createdAt: "30-12-2023",
+    amount: 120,
+    sender: "iopeyemi621@gmail.com",
+    recipient: "roi5tech@gmail.com",
+    description: "payment for sellout products",
+    status: "success",
+  },
+  {
+    _id: 4456789,
+    createdAt: "12-04-2024",
+    amount: 320,
+    sender: "iopeyemi621@gmail.com",
+    recipient: "roi5tech@gmail.com",
+    description: "payment for sellout sellout products",
+    status: "success",
+  },
+];
 
 const Wallet = () => {
   const user = useSelector(selectUser);
@@ -70,6 +92,9 @@ const Wallet = () => {
             </div>
           </div>
           {/* Wallet Transactions */}
+          {user !== null && (
+            <WalletTransaction transactions={transactions} user={user} />
+          )}
         </div>
       </div>
     </section>
