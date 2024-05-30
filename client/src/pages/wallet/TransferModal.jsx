@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import "./TransferModal.scss";
 import { AiOutlineClose, AiOutlineInfoCircle } from "react-icons/ai";
 import { Spinner } from "../../components/loader/Loader";
+import { useSelector } from "react-redux";
+import { selectRecipientName } from "../../redux/features/transaction/transactionSlice";
 
 const TransferModal = ({
   transferData,
@@ -14,6 +16,8 @@ const TransferModal = ({
   closeModal,
 }) => {
   const focusInputRef = useRef(null);
+
+  const recipientName = useSelector(selectRecipientName);
 
   useEffect(() => {
     focusInputRef.current?.focus();
@@ -49,7 +53,10 @@ const TransferModal = ({
                 />
               </p>
               <p className="req">
-                <label>Reciever Email Account</label>
+                <label>Reciever Account Details</label>
+                <span className="--text-sm">
+                  {recipientName && recipientName}
+                </span>
                 <span className="--flex-end">
                   <input
                     type="text"

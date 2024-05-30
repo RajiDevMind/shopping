@@ -64,7 +64,9 @@ const verifyAccount = asyncHandler(async (req, res) => {
     throw new Error("User account not found");
   }
 
-  res.status(201).json({ msg: "Account verification Successful" });
+  res
+    .status(200)
+    .json({ recipientName: user.name, msg: "Account verification Successful" });
 });
 
 const getUserTransactions = asyncHandler(async (req, res) => {

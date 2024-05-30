@@ -12,7 +12,7 @@ const getUserTransactions = async () => {
 // Verify Recipient account within the application
 const verifyAccount = async (acctData) => {
   const resp = await axios.post(API_URL + "verifyAccount", acctData);
-  return resp.data.msg;
+  return resp.data;
 };
 
 const transferFund = async (funds) => {

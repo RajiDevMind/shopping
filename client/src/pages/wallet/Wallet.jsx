@@ -14,10 +14,12 @@ import {
 import { FaRegPaperPlane } from "react-icons/fa";
 import WalletTransaction from "./WalletTransaction";
 import {
+  RESET_RECIPIENT_NAME,
   RESET_TRANSACTION_MSG,
   getUserTransactions,
   selectTransaction,
   selectTransactionMSG,
+  transferFund,
   verifyAccount,
 } from "../../redux/features/transaction/transactionSlice";
 import TransferModal from "./TransferModal";
@@ -80,6 +82,7 @@ const Wallet = () => {
     setTransferData({ ...transferData, [name]: value });
     setIsVerified(false);
     dispatch(RESET_TRANSACTION_MSG());
+    dispatch(RESET_RECIPIENT_NAME()); // monitor recipient name onchange/dismiss
   };
 
   const verifyRecipientAcct = async (e) => {
@@ -95,7 +98,23 @@ const Wallet = () => {
   };
 
   const transferMoney = async (e) => {
-    console.log("TransferMoney");
+    e.preventDefault();
+    // Validation
+    if (amount < 1) {
+      return toast.error("Invalid Amount! Greater than zero(0)");
+    }
+    if (!description) {
+      return toast.error("Please enter a description to the transaction");
+    }
+
+    const formData = {
+      ...transferData,
+      sender: user.email,
+      status: "Success",
+    };
+
+    await dispatch(transferFund(formData));
+    await dispatch(getUser());
   };
 
   const closeModal = async (e) => {
@@ -111,9 +130,17 @@ const Wallet = () => {
     dispatch(getUserTransactions());
   }, [dispatch]);
 
+  // Tracking verify btn to display when transactionMSG setIsVerified to true
   useEffect(() => {
     if (transactionMSG === "Account verification Successful") {
       setIsVerified(true);
+    }
+    if (transactionMSG === "Transaction Successful") {
+      setTransferData({ ...initialState });
+      setShowTransferModal(false);
+      setIsVerified(false);
+      dispatch(RESET_RECIPIENT_NAME());
+      dispatch(getUserTransactions());
     }
     dispatch(RESET_TRANSACTION_MSG());
   }, [dispatch, transactionMSG]);

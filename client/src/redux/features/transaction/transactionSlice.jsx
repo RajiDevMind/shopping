@@ -3,6 +3,7 @@ import transactionService from "./transactionService";
 import { toast } from "react-toastify";
 
 const initialState = {
+  recipientName: "",
   transaction: null,
   transactions: [],
   isError: false,
@@ -17,6 +18,9 @@ const transactionSlice = createSlice({
   reducers: {
     RESET_TRANSACTION_MSG(state) {
       state.msg = "";
+    },
+    RESET_RECIPIENT_NAME(state) {
+      state.recipientName = "";
     },
   },
   extraReducers: (builder) => {
@@ -45,8 +49,10 @@ const transactionSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.msg = action.payload;
-        toast.success(action.payload);
+        state.msg = action.payload.msg;
+        state.recipientName = action.payload.recipientName;
+        toast.success(action.payload.msg);
+        console.log(action.payload);
       })
       .addCase(verifyAccount.rejected, (state, action) => {
         state.isLoading = false;
@@ -118,9 +124,9 @@ export const verifyAccount = createAsyncThunk(
 
 export const transferFund = createAsyncThunk(
   "transactions/transferFund",
-  async (funds, thunkAPI) => {
+  async (fundsData, thunkAPI) => {
     try {
-      const responseData = await transactionService.transferFund(funds);
+      const responseData = await transactionService.transferFund(fundsData);
 
       return responseData;
     } catch (error) {
@@ -136,9 +142,11 @@ export const transferFund = createAsyncThunk(
   }
 );
 
-export const { RESET_TRANSACTION_MSG } = transactionSlice.actions;
+export const { RESET_TRANSACTION_MSG, RESET_RECIPIENT_NAME } =
+  transactionSlice.actions;
 
 export const selectTransaction = (state) => state.transaction.transactions;
 export const selectTransactionMSG = (state) => state.transaction.msg;
+export const selectRecipientName = (state) => state.transaction.recipientName;
 
 export default transactionSlice.reducer;
