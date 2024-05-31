@@ -1,5 +1,6 @@
 const Product = require("../models/productModel");
 const Transaction = require("../models/transactionModel");
+const User = require("../models/userModel");
 
 const calculateTotalAmount = (products, cartItems) => {
   let totalPrice = 0;
