@@ -2,7 +2,6 @@ import React from "react";
 import "./FooterLinks.scss";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import logoImg from "../../assets/raji-l.png";
 import links from "./links";
 
 const FooterLinks = () => {
@@ -25,7 +24,10 @@ const FooterLinks = () => {
       <section className="footer-section">
         <div className="container footer">
           <div className="footer-logo">
-            <img src={logoImg} alt="SellOut Logo" />
+            <img
+              src="https://i.ibb.co/51gv68Y/Sellout-Logo.png"
+              alt="SellOut Logo"
+            />
           </div>
           {links.map((link, index) => {
             const { header, link1, link2, link3, link4, linkTag } = link;

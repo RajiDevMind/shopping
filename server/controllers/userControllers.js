@@ -49,12 +49,12 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 
     // Send email to the user
-    const subject = "Successfully Registered - Sellout";
-    const send_to = email;
-    const template = successfulRegistration(name);
-    const reply_To = "roi4tech@gmail.com";
+    // const subject = "Successfully Registered - Sellout";
+    // const send_to = email;
+    // const template = successfulRegistration(name);
+    // const reply_To = "roi4tech@gmail.com";
 
-    await sendEmail(subject, send_to, template, reply_To);
+    // await sendEmail(subject, send_to, template, reply_To);
 
     // sending users data to the frontend
     res.status(201).json({ _id, name, email, role, token });

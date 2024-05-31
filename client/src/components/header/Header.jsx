@@ -18,9 +18,11 @@ import {
 export const logo = (
   <div className={styles.logo}>
     <Link to="/">
-      <h2>
-        Sell<span>Out</span>.
-      </h2>
+      <img
+        width={50}
+        src="https://i.ibb.co/51gv68Y/Sellout-Logo.png"
+        alt="Sellout Logo"
+      />
     </Link>
   </div>
 );

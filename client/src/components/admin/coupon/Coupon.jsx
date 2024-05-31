@@ -2,8 +2,11 @@ import React from "react";
 import CreateCoupon from "./CreateCoupon";
 import CouponList from "./CouponList";
 import "./Coupon.scss";
-
+import { useDispatch } from "react-redux";
+import { getCategories } from "../../../redux/features/cat&brands/catsAndBrandsSlice";
 const Coupon = () => {
+  const dispatch = useDispatch();
+
   const reloadCoupon = () => {
     dispatch(getCategories());
   };
