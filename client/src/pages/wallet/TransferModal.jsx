@@ -15,10 +15,9 @@ const TransferModal = ({
   verifyRecipientAcct,
   closeModal,
 }) => {
-  const focusInputRef = useRef(null);
-
   const recipientName = useSelector(selectRecipientName);
 
+  const focusInputRef = useRef(null);
   useEffect(() => {
     focusInputRef.current?.focus();
   }, []);

@@ -52,7 +52,6 @@ const transactionSlice = createSlice({
         state.msg = action.payload.msg;
         state.recipientName = action.payload.recipientName;
         toast.success(action.payload.msg);
-        console.log(action.payload);
       })
       .addCase(verifyAccount.rejected, (state, action) => {
         state.isLoading = false;

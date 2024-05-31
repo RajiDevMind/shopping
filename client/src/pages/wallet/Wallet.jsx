@@ -25,6 +25,7 @@ import {
 import TransferModal from "./TransferModal";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../utils";
+import DepositModal from "./DepositModal";
 
 const transactionss = [
   {
@@ -55,12 +56,22 @@ const initialState = {
   status: "",
 };
 
+const initialDepositState = {
+  amount: 0,
+  paymentMethod: "",
+};
+
 const Wallet = () => {
   const [transferData, setTransferData] = useState(initialState);
 
   const { amount, sender, recipient, description, status } = transferData;
 
+  const [depositData, setDepositData] = useState(initialDepositState);
+
+  const { amount: depositAmount, paymentMethod } = depositData;
+
   const [showTransferModal, setShowTransferModal] = useState(false);
+  const [showDepositModal, setShowDepositModal] = useState(false);
   const [isVerified, setIsVerified] = useState(true);
 
   const navigate = useNavigate();
@@ -75,6 +86,11 @@ const Wallet = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTransferData({ ...transferData, [name]: value });
+  };
+
+  const handleDepositInputChange = (e) => {
+    const { name, value } = e.target;
+    setDepositData({ ...depositData, [name]: value });
   };
 
   const handleAcctChange = (e) => {
@@ -117,10 +133,16 @@ const Wallet = () => {
     await dispatch(getUser());
   };
 
+  const depositMoney = async (e) => {
+    setShowDepositModal(true);
+  };
+
   const closeModal = async (e) => {
     if (e.target.classList.contains("cm")) {
       setShowTransferModal(false);
+      setShowDepositModal(false);
       setTransferData({ ...initialState });
+      setDepositData({ ...initialDepositState });
       setIsVerified(false);
     }
   };
@@ -161,7 +183,10 @@ const Wallet = () => {
               </span>
               <h4>${user?.balance.toFixed(2)}</h4>
               <div className="buttons --flex-center">
-                <button className="--btn --btn-primary">
+                <button
+                  className="--btn --btn-primary"
+                  onClick={() => setShowDepositModal(true)}
+                >
                   <AiOutlineDollarCircle /> &nbsp; Deposit Money
                 </button>
                 <button
@@ -209,6 +234,15 @@ const Wallet = () => {
             transferMoney={transferMoney}
             verifyRecipientAcct={verifyRecipientAcct}
             closeModal={closeModal}
+          />
+        )}
+        {/* Deposit Modal */}
+        {showDepositModal && (
+          <DepositModal
+            depositData={depositData}
+            closeModal={closeModal}
+            handleDepositInputChange={handleDepositInputChange}
+            depositMoney={depositMoney}
           />
         )}
       </div>
