@@ -231,7 +231,7 @@ const Wallet = () => {
                   <p>Account Balance</p>
                   <img src={mastercard} alt="cc" width={50} />
                 </span>
-                <h4>${user?.balance.toFixed(2)}</h4>
+                <h4>${user?.balance && user?.balance.toFixed(2)}</h4>
                 <div className="buttons --flex-center">
                   <button
                     className="--btn --btn-primary"

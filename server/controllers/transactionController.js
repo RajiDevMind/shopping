@@ -19,7 +19,7 @@ const transferFund = asyncHandler(async (req, res) => {
   }
 
   // Check senders account within DB
-  const user = User.findOne({ email: sender });
+  const user = await User.findOne({ email: sender });
   // confirm amount sending with current balance
   if (user.balance < amount) {
     res.status(400);
