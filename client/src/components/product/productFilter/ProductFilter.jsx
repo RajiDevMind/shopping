@@ -17,7 +17,7 @@ const ProductFilter = () => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState("All");
   const [brand, setBrand] = useState("All");
-  const [price, setPrice] = useState([50, 9500]);
+  const [price, setPrice] = useState([50, 1500]);
 
   const allCategories = [
     "All",
@@ -92,7 +92,7 @@ const ProductFilter = () => {
           range
           marks={{
             1: `${price[0]}`,
-            5000: `${price[1]}`,
+            900: `${price[1]}`,
           }}
           min={minPrice}
           max={maxPrice}
