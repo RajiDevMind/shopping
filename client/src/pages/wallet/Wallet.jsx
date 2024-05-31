@@ -27,6 +27,7 @@ import TransferModal from "./TransferModal";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../utils";
 import DepositModal from "./DepositModal";
+import axios from "axios";
 
 const initialState = {
   amount: 0,
@@ -155,8 +156,16 @@ const Wallet = () => {
       return;
     }
     if (paymentMethod === "stripe") {
-      toast.success("Paying with stripe");
-      return;
+      const { data } = await axios.post(
+        `${
+          import.meta.env.VITE_APP_BACKEND_URL
+        }/auth/transaction/depositFundStripe`,
+        {
+          amount: depositAmount,
+        }
+      );
+      window.location.href = data.url;
+      // return;
     }
   };
 

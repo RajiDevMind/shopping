@@ -82,18 +82,17 @@ const getUserTransactions = asyncHandler(async (req, res) => {
 
 const depositFundStripe = asyncHandler(async (req, res) => {
   const { amount } = req.body;
-
   const user = await User.findById(req.user._id);
 
   // Create Stripe Customer with userModel (stripeCustomerId)
   if (!user.stripeCustomerId) {
     const customer = await stripe.customers.create({ email: user.email });
-    user.stripeCustomerId = customer;
+    user.stripeCustomerId = customer.id;
+    user.save();
   }
-  user.save();
 
   // Creat Stripe Session
-  const session = await stripe.checkout.session.create({
+  const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
     line_items: [
@@ -103,7 +102,7 @@ const depositFundStripe = asyncHandler(async (req, res) => {
           currency: "usd",
           product_data: {
             name: "sellout wallet deposit...",
-            description: `Make a deposit of $${amount}to your Sellout wallet...`,
+            description: `Make a deposit of $${amount} to your Sellout wallet...`,
           },
           unit_amount: amount * 100,
         },
