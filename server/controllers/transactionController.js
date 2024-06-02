@@ -121,7 +121,7 @@ const depositFundStripe = asyncHandler(async (req, res) => {
 const endpointSecret = process.env.STRIPE_ENDPOINT_SECRET;
 
 const webhook = asyncHandler(async (req, res) => {
-  const sig = request.headers["stripe-signature"];
+  const sig = req.headers["stripe-signature"];
 
   let data;
   let event;
@@ -132,7 +132,7 @@ const webhook = asyncHandler(async (req, res) => {
     console.log("Webhook Verified!");
   } catch (err) {
     console.log("Webhook Verification Error!", err);
-    response.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
 
