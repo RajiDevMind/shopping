@@ -7,6 +7,7 @@ const sendEmail = require("../utils/sendEmail");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
 const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const axios = require("axios");
+const User = require("../models/userModel");
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
@@ -180,6 +181,78 @@ const verifyFlutterwavePayment = asyncHandler(async (req, res) => {
   }
 });
 
+const payWithWallet = asyncHandler(async (req, res) => {
+  const { items, cartItems, shippingAddress, coupon } = req.body;
+  const user = await User.findById(req.user._id);
+
+  const product = await Product.find();
+  const today = new Date();
+
+  let orderAmount;
+
+  orderAmount = calculateTotalAmount(product, items); // calculate "cartItems" and find the "product" in the DB
+
+  if (coupon !== null && coupon?.name !== "nil") {
+    let totalAfterDiscount =
+      orderAmount - (orderAmount * coupon.discount) / 100;
+    orderAmount = totalAfterDiscount;
+  }
+
+  if (user.balance < orderAmount) {
+    res.status(400);
+    throw new Error("Insufficient balance");
+  }
+
+  // Create new transaction and pay with wallet
+  const walletTransaction = await Transaction.create({
+    amount: orderAmount,
+    sender: user.email,
+    recipient: "Sellout Online Store",
+    description: "Payment for products",
+    status: "success",
+  });
+
+  // Decrease sender balance
+  const newBalance = await User.findByIdAndUpdate(
+    { email: user.email },
+    {
+      $inc: { balance: -orderAmount },
+    }
+  );
+
+  // Create Order
+  const newOrder = await Order.create({
+    user: user._id,
+    orderDate: today.toDateString(),
+    orderTime: today.toLocaleTimeString(),
+    orderAmount,
+    orderStatus: "Order Placed...",
+    paymentMethod: "Shopito Wallet",
+    cartItems,
+    shippingAddress,
+    coupon,
+  });
+
+  // Update product quantity
+  await updateProductQuantity(cartItems);
+
+  // Send email to the user
+  const subject = "Order created -Sellout App";
+  const send_to = user.email;
+  const template = orderSuccessEmail(user.name, cartItems);
+  const reply_To = "no_reply@gmail.com";
+
+  await sendEmail(subject, send_to, template, reply_To);
+
+  if (walletTransaction && newBalance && newOrder) {
+    return res.status(200).json({
+      msg: "Payment Successful",
+      url: `${process.env.CLIENT_URL}/checkout-success`,
+    });
+  }
+  res.status(400).json({ msg: "Something went wrong, Contact admin" });
+});
+
 module.exports = {
   createOrder,
   getAllOrders,
@@ -187,4 +260,5 @@ module.exports = {
   updateOrderStatus,
   stripePayment,
   verifyFlutterwavePayment,
+  payWithWallet,
 };
