@@ -2,7 +2,7 @@ const Product = require("../models/productModel");
 const Transaction = require("../models/transactionModel");
 const User = require("../models/userModel");
 
-const calculateTotalAmount = (products, cartItems) => {
+const calculateTotalAmountStripe = (products, cartItems) => {
   let totalPrice = 0;
 
   cartItems.forEach((cartItem) => {
@@ -18,6 +18,24 @@ const calculateTotalAmount = (products, cartItems) => {
   });
 
   return totalPrice * 100;
+};
+
+const calculateTotalAmountWallet = (products, cartItems) => {
+  let totalPrice = 0;
+
+  cartItems.forEach((cartItem) => {
+    const product = products.find((product) => {
+      return product._id?.toString() === cartItem._id;
+    });
+
+    if (product) {
+      const quantity = cartItem.cartQuantity;
+      const price = parseFloat(product.price);
+      totalPrice += quantity * price;
+    }
+  });
+
+  return totalPrice;
 };
 
 // Stock mgt: Update carts quantity from the DB, when user purchased
@@ -64,4 +82,9 @@ const depositFund = async (customer, data, description, source) => {
   );
 };
 
-module.exports = { calculateTotalAmount, updateProductQuantity, depositFund };
+module.exports = {
+  calculateTotalAmountStripe,
+  calculateTotalAmountWallet,
+  updateProductQuantity,
+  depositFund,
+};

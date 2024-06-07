@@ -2,12 +2,17 @@ require("dotenv").config();
 const asyncHandler = require("express-async-handler");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
-const { calculateTotalAmount, updateProductQuantity } = require("../utils");
+const {
+  updateProductQuantity,
+  calculateTotalAmountStripe,
+  calculateTotalAmountWallet,
+} = require("../utils");
 const sendEmail = require("../utils/sendEmail");
 const { orderSuccessEmail } = require("../emailTemplates/orderTemplate");
 const Stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const axios = require("axios");
 const User = require("../models/userModel");
+const Transaction = require("../models/transactionModel");
 
 const createOrder = asyncHandler(async (req, res) => {
   const {
@@ -113,7 +118,7 @@ const stripePayment = asyncHandler(async (req, res) => {
 
   let orderAmount;
 
-  orderAmount = calculateTotalAmount(product, items); // calculate "cartItems" and find the "product" in the DB
+  orderAmount = calculateTotalAmountStripe(product, items); // calculate "cartItems" and find the "product" in the DB
 
   if (coupon !== null && coupon?.name !== "nil") {
     let totalAfterDiscount =
@@ -182,7 +187,7 @@ const verifyFlutterwavePayment = asyncHandler(async (req, res) => {
 });
 
 const payWithWallet = asyncHandler(async (req, res) => {
-  const { items, cartItems, shippingAddress, coupon } = req.body;
+  const { items, cartItems, shippingAddress, coupon } = req.body; // items are the array of productIDs
   const user = await User.findById(req.user._id);
 
   const product = await Product.find();
@@ -190,7 +195,7 @@ const payWithWallet = asyncHandler(async (req, res) => {
 
   let orderAmount;
 
-  orderAmount = calculateTotalAmount(product, items); // calculate "cartItems" and find the "product" in the DB
+  orderAmount = calculateTotalAmountWallet(product, items); // calculate "cartItems" and find the "product" in the DB
 
   if (coupon !== null && coupon?.name !== "nil") {
     let totalAfterDiscount =
@@ -214,6 +219,7 @@ const payWithWallet = asyncHandler(async (req, res) => {
 
   // Decrease sender balance
   const newBalance = await User.findByIdAndUpdate(
+    { _id: user._id },
     { email: user.email },
     {
       $inc: { balance: -orderAmount },
