@@ -186,6 +186,39 @@ const getCartItems = asyncHandler(async (req, res) => {
   }
 });
 
+// User Wishlist
+const addToWishList = asyncHandler(async (req, res) => {
+  const { productId } = req.body;
+
+  await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $addToSet: { wishlist: productId } }
+  );
+
+  res.status(200).json({ msg: "Product added to wishlist" });
+});
+
+// get a specific user wishlists
+const getAllWishList = asyncHandler(async (req, res) => {
+  const wishLists = await User.findOne({ email: req.user.email })
+    .select("wishlist")
+    .populate("wishlist");
+
+  res.status(200).json(wishLists);
+});
+
+// Removing a single product from wishlist
+const removeWishList = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+
+  await User.findOneAndUpdate(
+    { email: req.user.email },
+    { $pull: { wishlist: productId } }
+  );
+
+  res.status(200).json({ msg: "Product removed from wishlist" });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -196,4 +229,7 @@ module.exports = {
   add_Image,
   saveCart,
   getCartItems,
+  addToWishList,
+  getAllWishList,
+  removeWishList,
 };

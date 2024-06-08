@@ -11,6 +11,9 @@ const {
   add_Image,
   saveCart,
   getCartItems,
+  addToWishList,
+  getAllWishList,
+  removeWishList,
 } = require("../controllers/userControllers");
 
 router.post("/register", registerUser);
@@ -24,5 +27,10 @@ router.patch("/add-image", auth, add_Image);
 // Storing Cart Items from the user
 router.post("/saveCart", auth, saveCart);
 router.get("/getCartItems", auth, getCartItems);
+
+// Wishlist
+router.get("/addToWishList", auth, addToWishList);
+router.get("/getAllWishList", auth, getAllWishList);
+router.put("/wishList/:productId", auth, removeWishList);
 
 module.exports = router;
