@@ -9,6 +9,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   msg: "",
+  wishList: [],
 };
 
 // Register Users
@@ -132,6 +133,69 @@ export const updateImg = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const responseData = await authService.updateImg(userData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+// addTo User WishList
+export const addToWishList = createAsyncThunk(
+  "auth/addToWishList",
+  async (productData, thunkAPI) => {
+    try {
+      const responseData = await authService.addToWishList(productData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+// Get all User WishLists
+export const getAllWishList = createAsyncThunk(
+  "auth/getAllWishList",
+  async (_, thunkAPI) => {
+    try {
+      const responseData = await authService.getAllWishList();
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+// Remove from User WishLists
+export const removeWishList = createAsyncThunk(
+  "auth/removeWishList",
+  async (productId, thunkAPI) => {
+    try {
+      const responseData = await authService.removeWishList(productId);
 
       return responseData;
     } catch (error) {
@@ -276,6 +340,53 @@ const authSlice = createSlice({
         toast.success("Profile Picture Updated Successfully!");
       })
       .addCase(updateImg.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Add to user wichlist
+      .addCase(addToWishList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addToWishList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.msg = action.payload;
+        toast.success(action.payload);
+      })
+      .addCase(addToWishList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Get all User wichlists
+      .addCase(getAllWishList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllWishList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.wishList = action.payload.wishlist;
+      })
+      .addCase(getAllWishList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Remove from User wichlists
+      .addCase(removeWishList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(removeWishList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.msg = action.payload;
+        toast.success(action.payload);
+      })
+      .addCase(removeWishList.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;

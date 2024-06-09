@@ -45,6 +45,23 @@ const updateImg = async (userData) => {
   const resp = await axios.patch(API_URL + "add-image", userData);
   return resp.data;
 };
+// Add to User Wishlist
+const addToWishList = async (productData) => {
+  const resp = await axios.post(API_URL + "addToWishlist", productData);
+  return resp.data.msg;
+};
+
+// Add to User Wishlist
+const getAllWishList = async () => {
+  const resp = await axios.get(API_URL + "getAllWishList");
+  return resp.data;
+};
+
+// Remove from User Wishlist
+const removeWishList = async (productId) => {
+  const resp = await axios.put(API_URL + `wishList/${productId}`);
+  return resp.data.msg;
+};
 
 const authService = {
   register,
@@ -54,6 +71,9 @@ const authService = {
   getUser,
   updateUser,
   updateImg,
+  addToWishList,
+  getAllWishList,
+  removeWishList,
 };
 
 export default authService;

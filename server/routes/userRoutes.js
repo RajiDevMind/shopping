@@ -29,7 +29,7 @@ router.post("/saveCart", auth, saveCart);
 router.get("/getCartItems", auth, getCartItems);
 
 // Wishlist
-router.get("/addToWishList", auth, addToWishList);
+router.post("/addToWishList", auth, addToWishList);
 router.get("/getAllWishList", auth, getAllWishList);
 router.put("/wishList/:productId", auth, removeWishList);
 

@@ -15,6 +15,7 @@ import {
   saveCartDB,
   selectCartItems,
 } from "../../../redux/features/cart/cartSlice";
+import { addToWishList } from "../../../redux/features/auth/authSlice";
 
 const ProductDetails = () => {
   const [imgIndex, setImgIndex] = useState(0);
@@ -64,6 +65,13 @@ const ProductDetails = () => {
     dispatch(
       saveCartDB({ cartItems: JSON.parse(localStorage.getItem("cartItems")) })
     );
+  };
+
+  const addWishList = async (product) => {
+    const productData = {
+      productId: product._id,
+    };
+    await dispatch(addToWishList(productData));
   };
 
   const averageRating = calculateAverageRatings(product?.ratings);
@@ -188,7 +196,10 @@ const ProductDetails = () => {
                       OUT OF STOCK
                     </button>
                   )}
-                  <button className="--btn --btn-danger">
+                  <button
+                    className="--btn --btn-danger"
+                    onClick={() => addWishList(product)}
+                  >
                     ADD TO WISHLIST
                   </button>
                 </div>
