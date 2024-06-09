@@ -117,6 +117,66 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+export const reviewProduct = createAsyncThunk(
+  "product/reviewProduct",
+  async ({ id, reviewData }, thunkAPI) => {
+    try {
+      const responseData = await productService.reviewProduct(id, reviewData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+export const deleteReview = createAsyncThunk(
+  "product/deleteReview",
+  async ({ id, reviewData }, thunkAPI) => {
+    try {
+      const responseData = await productService.deleteReview(id, reviewData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
+export const updateReview = createAsyncThunk(
+  "product/updateReview",
+  async ({ id, reviewData }, thunkAPI) => {
+    try {
+      const responseData = await productService.updateReview(id, reviewData);
+
+      return responseData;
+    } catch (error) {
+      // the following are d potential err msg from APIs
+      const errorMSGs =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(errorMSGs);
+    }
+  }
+);
+
 const ProductSlice = createSlice({
   name: "product",
   initialState,
@@ -234,6 +294,55 @@ const ProductSlice = createSlice({
         }
       })
       .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Review Products
+      .addCase(reviewProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(reviewProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload.product.msg);
+      })
+      .addCase(reviewProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Delete Products Review
+      .addCase(deleteReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload);
+        console.log(action.payload);
+      })
+      .addCase(deleteReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.msg = action.payload;
+        toast.error(action.payload);
+      })
+      // Update Products Review
+      .addCase(updateReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        toast.success(action.payload);
+      })
+      .addCase(updateReview.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;

@@ -29,6 +29,7 @@ import CheckoutPaystack from "./pages/checkout/CheckoutPaystack";
 import Wallet from "./pages/wallet/Wallet";
 import CheckoutWallet from "./pages/checkout/CheckoutWallet";
 import WishList from "./pages/wishlist/WishList";
+import ReviewProduct from "./pages/reviewProduct/ReviewProduct";
 
 // asset to make API calls with axios
 axios.defaults.baseURL = import.meta.env.VITE_APP_BACKEND_URL;
@@ -78,6 +79,7 @@ const App = () => {
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
 
             <Route path="/wishlists" element={<WishList />} />
+            <Route path="/reviewproduct/:id" element={<ReviewProduct />} />
 
             <Route path="/wallet" element={<Wallet />} />
 

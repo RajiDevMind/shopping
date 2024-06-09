@@ -20,7 +20,7 @@ router.delete("/:id", auth, adminOnlyAuth, deleteProduct);
 router.patch("/:id", auth, adminOnlyAuth, updateProduct);
 
 router.patch("/review/:id", auth, reviewProduct);
-router.delete("/deleteReview/:id", auth, deleteReview);
+router.patch("/deleteReview/:id", auth, deleteReview);
 router.patch("/updateReview/:id", auth, updateReview);
 
 module.exports = router;

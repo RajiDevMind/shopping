@@ -115,9 +115,11 @@ const OrderDetailsComp = ({ orderPageLink }) => {
                       <td>{cartQuantity}</td>
                       <td>${price * cartQuantity}</td>
                       <td className={"icons"}>
-                        <button className="--btn --btn-primary">
-                          Review Product
-                        </button>
+                        <Link to={`/reviewproduct/${_id}`}>
+                          <button className="--btn --btn-primary">
+                            Review Product
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   );

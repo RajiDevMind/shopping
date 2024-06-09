@@ -30,12 +30,30 @@ const updateProduct = async (id, productData) => {
   return resp.data;
 };
 
+const reviewProduct = async (id, reviewData) => {
+  const resp = await axios.patch(API_URL + `review/${id}`, reviewData);
+  return resp.data;
+};
+
+const deleteReview = async (id, reviewData) => {
+  const resp = await axios.patch(API_URL + `deleteReview/${id}`, reviewData);
+  return resp.data.msg;
+};
+
+const updateReview = async (id, reviewData) => {
+  const resp = await axios.patch(API_URL + `updateReview/${id}`, reviewData);
+  return resp.data.msg;
+};
+
 const productService = {
   createProduct,
   getAllProducts,
   deleteProduct,
   getSingleProduct,
   updateProduct,
+  reviewProduct,
+  deleteReview,
+  updateReview,
 };
 
 export default productService;
