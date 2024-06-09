@@ -14,6 +14,7 @@ import {
   selectCartItems,
   selectCartTotalQuantity,
 } from "../../redux/features/cart/cartSlice";
+import { confirmAlert } from "react-confirm-alert";
 
 export const logo = (
   <div className={styles.logo}>
@@ -56,6 +57,23 @@ const Header = () => {
     setShowMenu(false);
   };
 
+  // react-confirm-alert to delete review
+  const confirmDelete = () => {
+    confirmAlert({
+      title: "Logging Out?",
+      message: "Confirm to logout?",
+      buttons: [
+        {
+          label: "Logout",
+          onClick: () => logoutUser(),
+        },
+        {
+          label: "Cancel",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
   const logoutUser = async () => {
     await dispatch(logout());
     await dispatch(RESET_AUTH());
@@ -135,7 +153,7 @@ const Header = () => {
                 </NavLink>
               </ShowOnLogin>
               <ShowOnLogin>
-                <Link to={"/"} onClick={logoutUser}>
+                <Link to={"/"} onClick={confirmDelete}>
                   logout
                 </Link>
               </ShowOnLogin>
