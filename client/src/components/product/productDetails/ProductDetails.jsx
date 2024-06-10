@@ -16,6 +16,8 @@ import {
   selectCartItems,
 } from "../../../redux/features/cart/cartSlice";
 import { addToWishList } from "../../../redux/features/auth/authSlice";
+import StarRatings from "react-star-ratings";
+import ProductRatingSummary from "../productRating/ProductRatingSummary";
 
 const ProductDetails = () => {
   const [imgIndex, setImgIndex] = useState(0);
@@ -217,6 +219,50 @@ const ProductDetails = () => {
         {/* Review section */}
         <Card cardClass={styles.card}>
           <h3>Product Reviews?</h3>
+          <ProductRating
+            averageRating={averageRating}
+            noOfRatings={product?.ratings?.length}
+          />
+          <div className="--underline"></div>
+          <div className={styles.ratings}>
+            {product !== null && product?.ratings?.length > 0 && (
+              // <p>Product ratings summary</p>
+              <ProductRatingSummary ratings={product?.ratings} />
+            )}
+            <div className="--m">
+              {product?.ratings?.length === 0 ? (
+                <p>No review for this product yet.</p>
+              ) : (
+                <>
+                  {product?.ratings?.map((rating, index) => {
+                    const { name, review, reviewDate, star, userID } = rating;
+                    return (
+                      <div key={index} className={styles.review}>
+                        <StarRatings
+                          starDimension="20px"
+                          starSpacing="2px"
+                          starRatedColor="#F6B01E"
+                          // starHoverColor="#F6B01E"
+                          // rating={star}
+                          // changeRating={changeStarRating}
+                          // editing={false}
+                          // isSelectable={true}
+                        />
+                        <p>{review}</p>
+                        <span>
+                          <b>{reviewDate}</b>
+                        </span>
+                        <br />
+                        <span>
+                          <b>By: {name}</b>
+                        </span>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          </div>
         </Card>
       </div>
     </section>
