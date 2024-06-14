@@ -3,7 +3,7 @@ import CreateCoupon from "./CreateCoupon";
 import CouponList from "./CouponList";
 import "./Coupon.scss";
 import { useDispatch } from "react-redux";
-import { getCategories } from "../../../redux/features/cat&brands/catsAndBrandsSlice";
+import { getCategories } from "../../../redux/features/cat&brands/CatsAndBrandsSlice";
 const Coupon = () => {
   const dispatch = useDispatch();
 

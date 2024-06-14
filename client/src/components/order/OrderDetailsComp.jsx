@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleOrder } from "../../redux/features/order/orderSlice";
+import { getSingleOrder } from "../../redux/features/order/OrderSlice";
 import { Spinner } from "../loader/Loader";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

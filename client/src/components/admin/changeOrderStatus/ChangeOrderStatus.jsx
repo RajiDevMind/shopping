@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "../../loader/Loader";
 import Card from "../../card/Card";
 import { useParams } from "react-router-dom";
-import { updateOrderStatus } from "../../../redux/features/order/orderSlice";
+import { updateOrderStatus } from "../../../redux/features/order/OrderSlice";
 
 const ChangeOrderStatus = () => {
   const [status, setStatus] = useState("");

@@ -1,0 +1,46 @@
+/* Highlighted element border */
+.driver-highlighted-element {
+  border: 2px solid #3498db !important;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.7) !important;
+}
+
+/* Popover title */
+.driver-popover-title {
+  font-size: 1.5rem;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+/* Popover description */
+.driver-popover-description {
+  font-size: 1rem;
+  color: #000000;
+}
+
+/* Buttons */
+.driver-close-btn,
+.driver-next-btn,
+.driver-prev-btn,
+.driver-done-btn {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.driver-close-btn:hover,
+.driver-next-btn:hover,
+.driver-prev-btn:hover,
+.driver-done-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Customize popover */
+.driver-popover {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 5px 4px rgba(0, 0, 0, 0.5);
+}

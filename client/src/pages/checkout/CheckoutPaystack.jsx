@@ -13,7 +13,7 @@ import {
 } from "../../redux/features/checkout/checkoutSlice";
 import Card from "../../components/card/Card";
 import CheckoutSummary from "../../components/checkout/checkoutSummary/CheckoutSummary";
-import { createOrder } from "../../redux/features/order/orderSlice";
+import { createOrder } from "../../redux/features/order/OrderSlice";
 import { toast } from "react-toastify";
 
 const CheckoutPaystack = () => {

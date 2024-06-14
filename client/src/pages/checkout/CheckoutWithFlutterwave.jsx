@@ -17,7 +17,7 @@ import { selectUser } from "../../redux/features/auth/authSlice";
 import {
   createOrder,
   getSingleOrder,
-} from "../../redux/features/order/orderSlice";
+} from "../../redux/features/order/OrderSlice";
 import {
   selectPaymentMethod,
   selectShippingAddress,

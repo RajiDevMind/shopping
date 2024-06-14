@@ -11,7 +11,7 @@ import {
   selectPaymentMethod,
   selectShippingAddress,
 } from "../../redux/features/checkout/checkoutSlice";
-import { createOrder } from "../../redux/features/order/orderSlice";
+import { createOrder } from "../../redux/features/order/OrderSlice";
 import CheckoutSummary from "../../components/checkout/checkoutSummary/CheckoutSummary";
 import Card from "../../components/card/Card";
 

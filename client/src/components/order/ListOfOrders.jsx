@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrders } from "../../redux/features/order/orderSlice";
+import { getAllOrders } from "../../redux/features/order/OrderSlice.jsx";
 import Loader from "../loader/Loader.jsx";
 
 const ListOfOrders = ({ orderdetails }) => {

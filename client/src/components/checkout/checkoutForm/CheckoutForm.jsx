@@ -19,7 +19,7 @@ import {
   selectShippingAddress,
 } from "../../../redux/features/checkout/checkoutSlice";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from "../../../redux/features/order/orderSlice";
+import { createOrder } from "../../../redux/features/order/OrderSlice";
 
 export default function CheckoutForm() {
   const stripe = useStripe();

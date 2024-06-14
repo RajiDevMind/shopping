@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSingleOrder } from "../../redux/features/order/orderSlice";
+import { getSingleOrder } from "../../redux/features/order/OrderSlice";
 
 import OrderDetailsComp from "./OrderDetailsComp";
 

@@ -15,6 +15,9 @@ import {
   selectCartTotalQuantity,
 } from "../../redux/features/cart/cartSlice";
 import { confirmAlert } from "react-confirm-alert";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import "./Driverjs.css";
 
 export const logo = (
   <div className={styles.logo}>
@@ -84,9 +87,67 @@ const Header = () => {
     dispatch(CALCULATE_TOTAL_QUANTITY());
   }, [dispatch, cartItems]);
 
+  const driverObj = driver({
+    showProgress: true,
+    steps: [
+      {
+        element: "#nowhere",
+        popover: {
+          title: "Welcome to Sellout!",
+          description:
+            "An online shopping that is built for you. If you`re seeing this dialog. It is your first time on this app 😍. Let me give a ride 🏍️💨...",
+          side: "right",
+          align: "center",
+        },
+      },
+      {
+        element: "#register",
+        popover: {
+          title: "Create free account",
+          description: "Join us by creating a free account here",
+        },
+      },
+      {
+        element: "#login",
+        popover: {
+          title: "Login",
+          description: "Already have an account Login here",
+        },
+      },
+      {
+        element: "#shop",
+        popover: {
+          title: "Shop Items",
+          description:
+            "Click here to start shopping. With wide range of products",
+        },
+      },
+      {
+        element: "#cart",
+        popover: {
+          title: "Cart Items",
+          description: "Click here to view your cart items",
+        },
+      },
+    ],
+  });
+
+  // To display Driver tour only once when page mount
+  useEffect(() => {
+    const tourShown = localStorage.getItem("tourShown");
+
+    if (!tourShown) {
+      driverObj.drive();
+      setShowMenu(true);
+
+      // set driver to true in localstorage and neva run again when page mount
+      localStorage.setItem("tourShown", "true");
+    }
+  }, []);
+
   const cart = (
     <span className={styles.cart}>
-      <NavLink to={"/cart"}>
+      <NavLink to={"/cart"} id="cart">
         Cart
         <FaShoppingCart size={22} />
         <p>{cartTotalQuantity}</p>
@@ -116,7 +177,7 @@ const Header = () => {
               <FaTimes size={22} color="#fff" onClick={hideMenu} />
             </li>
             <li>
-              <NavLink to="/shop" className={activeLink}>
+              <NavLink to="/shop" className={activeLink} id="shop">
                 Shop
               </NavLink>
             </li>
@@ -138,12 +199,12 @@ const Header = () => {
                 </NavLink>
               </ShowOnLogin>
               <ShowOnLogout>
-                <NavLink to={"/login"} className={activeLink}>
+                <NavLink to={"/login"} className={activeLink} id="login">
                   Login
                 </NavLink>
               </ShowOnLogout>
               <ShowOnLogout>
-                <NavLink to={"/register"} className={activeLink}>
+                <NavLink to={"/register"} className={activeLink} id="register">
                   Register
                 </NavLink>
               </ShowOnLogout>

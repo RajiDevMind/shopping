@@ -6,7 +6,7 @@ import filterReducer from "./features/products/filterSlice";
 import couponReducer from "./features/coupon/couponSlice";
 import cartReducer from "./features/cart/cartSlice";
 import checkoutReducer from "./features/checkout/checkoutSlice";
-import orderReducer from "./features/order/orderSlice";
+import orderReducer from "./features/order/OrderSlice";
 import transactionReducer from "./features/transaction/transactionSlice";
 
 export const store = configureStore({
